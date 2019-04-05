@@ -1,5 +1,6 @@
 package okten.megaproject.controllers;
 
+import okten.megaproject.Service.FilmService;
 import okten.megaproject.dao.FilmsDao;
 import okten.megaproject.models.Films;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import java.util.List;
 
 @RestController
 public class MainController {
-
+    String path = System.getProperty("user.home") + File.separator + "FilmImages" + File.separator;
     @Autowired
     FilmsDao filmsDao;
+    @Autowired
+    FilmService filmService;
 
     @GetMapping("/")
     @CrossOrigin(origins = "http://localhost:4200")
@@ -26,7 +29,15 @@ public class MainController {
 
     @PostMapping("/addfilm")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Films addFilm(@RequestBody Films film){
+    public Films addFilm(@RequestParam("name") String name,
+                         @RequestParam("year") String year,
+                         @RequestParam("country") String country,
+                         @RequestParam("aboutFilm") String aboutFilm,
+                         @RequestParam("quality") String quality ,
+                         @RequestParam("picture") MultipartFile picture){
+        Films film = new Films(name,year,aboutFilm,country,quality);
+        filmService.transferTo(picture);
+        film.setPicture(picture.getOriginalFilename());
         return filmsDao.save(film);
     }
 
