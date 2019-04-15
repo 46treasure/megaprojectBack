@@ -13,7 +13,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-
+@Configuration
 public class Security extends WebSecurityConfigurerAdapter {
 
         @Override
@@ -25,6 +25,8 @@ public class Security extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
+                    .cors().configurationSource(corsConfigurationSource())
+                    .and()
                     .csrf()
                     .disable()
                     .authorizeRequests()

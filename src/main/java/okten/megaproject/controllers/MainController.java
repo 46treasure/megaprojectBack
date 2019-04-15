@@ -3,7 +3,11 @@ package okten.megaproject.controllers;
 import okten.megaproject.Service.FilmService;
 import okten.megaproject.dao.FilmsDao;
 import okten.megaproject.models.Films;
+import okten.megaproject.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,5 +55,12 @@ public class MainController {
     public List<Films> delFilm(@RequestBody Long filmId){
         filmsDao.deleteById(filmId);
         return  filmsDao.findAll();
+    }
+
+    @GetMapping("/loginuser")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public String login(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 }

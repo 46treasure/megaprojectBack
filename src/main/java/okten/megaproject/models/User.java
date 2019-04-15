@@ -1,17 +1,33 @@
 package okten.megaproject.models;
 
-import lombok.Data;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
+public class User {
 
-public class AccountCredentials {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String username;
     private String password;
 
-    public AccountCredentials(){}
-
-    public AccountCredentials(String username, String password) {
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public User() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -32,11 +48,10 @@ public class AccountCredentials {
 
     @Override
     public String toString() {
-        return "AccountCredentials{" +
-                "username='" + username + '\'' +
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
 }
-
-
