@@ -31,12 +31,8 @@ public class RequestProcessingJWTFilter extends GenericFilterBean {
                     .parseClaimsJws(token.replace("Bearer", ""))
                     .getBody()
                     .getSubject();
-            System.out.println(user + "!!!!!!!!!!!---!!!!!");
-
-            //after parse of token we create Authentication object
             authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
         }
-        // and set it to global security context
         SecurityContextHolder.getContext()
                 .setAuthentication(authentication);
         chain.doFilter(request, response);

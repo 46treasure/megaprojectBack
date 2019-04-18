@@ -1,57 +1,86 @@
 package okten.megaproject.models;
 
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
-public class User {
+@Data
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
     private String password;
+    private String email;
+    private UserEnum userEnum = UserEnum.ROLE_USER;
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(userEnum.name()));
+        return authorities;
+}
+
+    private boolean isAccountNonExpired = true;
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
     }
 
-    public User() {
+    private boolean isAccountNonLocked = true;
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
     }
 
-    public int getId() {
-        return id;
+    private boolean isCredentialsNonExpired = true;
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    private boolean isEnabled = true;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
     }
 
     @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id &&
+                isAccountNonExpired == user.isAccountNonExpired &&
+                isAccountNonLocked == user.isAccountNonLocked &&
+                isCredentialsNonExpired == user.isCredentialsNonExpired &&
+                isEnabled == user.isEnabled &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(email, user.email) &&
+                userEnum == user.userEnum;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, username, password, email, userEnum, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
     }
 }
