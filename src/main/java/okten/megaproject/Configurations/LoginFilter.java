@@ -3,6 +3,7 @@ package okten.megaproject.Configurations;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import okten.megaproject.Service.UserService;
 import okten.megaproject.dao.UserDao;
 import okten.megaproject.models.AccountCredentials;
 import okten.megaproject.models.User;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,19 +37,23 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    UserService userService;
+
+
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 
         creds = new ObjectMapper()
                 .readValue(httpServletRequest.getInputStream(), AccountCredentials.class);
-        System.out.println(creds);
+        System.out.println(creds.getUsername());
+        if (creds.getUsername() == userDao.findByUsername())
             return getAuthenticationManager().
                     authenticate(new UsernamePasswordAuthenticationToken(
                             creds.getUsername(),
                             creds.getPassword(),
                             Collections.emptyList()));
-
     }
 
     @Override
