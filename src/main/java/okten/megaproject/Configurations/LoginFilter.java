@@ -3,6 +3,7 @@ package okten.megaproject.Configurations;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import okten.megaproject.Service.UserDetailServiceImpl;
 import okten.megaproject.Service.UserService;
 import okten.megaproject.dao.UserDao;
 import okten.megaproject.models.AccountCredentials;
@@ -35,10 +36,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private AccountCredentials creds;
 
+
     @Autowired
-    private UserDao userDao;
-    @Autowired
-    UserService userService;
+    UserDetailServiceImpl userDetailService;
 
 
 
@@ -48,7 +48,6 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         creds = new ObjectMapper()
                 .readValue(httpServletRequest.getInputStream(), AccountCredentials.class);
         System.out.println(creds.getUsername());
-        if (creds.getUsername() == userDao.findByUsername())
             return getAuthenticationManager().
                     authenticate(new UsernamePasswordAuthenticationToken(
                             creds.getUsername(),
