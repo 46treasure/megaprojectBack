@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @RestController
 public class MainController {
-    String path = System.getProperty("user.home") + File.separator + "FilmImages" + File.separator;
+    String path = "http://127.0.0.1:8887/";
 
     @Autowired
     FilmsDao filmsDao;
@@ -50,14 +50,14 @@ public class MainController {
                          @RequestParam("country") String country,
                          @RequestParam("aboutFilm") String aboutFilm,
                          @RequestParam("quality") String quality ,
-                         BindingResult bindingResult,
-                         @RequestParam("picture") MultipartFile picture){
-        if(bindingResult.hasErrors()) {
-            return null;
-        }
+                         @RequestParam("picture") MultipartFile picture,
+                         @RequestParam("movie") MultipartFile movie){
+
         Films film = new Films(name, year, aboutFilm, country, quality);
         filmService.transferTo(picture);
         film.setPicture(path + picture.getOriginalFilename());
+        filmService.transferTo(movie);
+        film.setMovie(path + movie.getOriginalFilename());
         return filmsDao.save(film);
     }
 

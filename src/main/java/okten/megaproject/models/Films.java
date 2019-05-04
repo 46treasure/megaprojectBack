@@ -25,6 +25,7 @@ public class Films {
     private String country;
     private String quality;
     private String picture;
+    private String movie;
 
     public Films(String name, String year, String aboutFilm, String country, String quality) {
         this.name = name;
