@@ -1,26 +1,24 @@
 package okten.megaproject.controllers;
 
+import okten.megaproject.Configurations.LoginFilter;
 import okten.megaproject.Service.FilmService;
 import okten.megaproject.dao.FilmsDao;
 import okten.megaproject.dao.UserDao;
-import okten.megaproject.models.AccountCredentials;
 import okten.megaproject.models.Films;
 import okten.megaproject.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class MainController {
@@ -34,14 +32,19 @@ public class MainController {
     UserDao userDao;
 
     @GetMapping("/")
-    @CrossOrigin(origins = "http://localhost:4200")
-    public List<Films> allFilms() {
-        System.out.println(filmsDao.findAll());
+    //@CrossOrigin(origins = "http://localhost:4200")
+    public List<Films> allFilms(Authentication authentication) {
+         authentication = SecurityContextHolder.getContext().getAuthentication();
+         //System.out.println( authentication.isAuthenticated());
+        //System.out.println(authentication.getPrincipal());
+        //System.out.println(authentication.getDetails());
+//        System.out.println(filmsDao.findAll());
+
         return filmsDao.findAll();
     }
 
     @PostMapping("/addfilm")
-    @CrossOrigin(origins = "http://localhost:4200")
+
     public Films addFilm(@RequestParam("name") String name,
                          @RequestParam("year") String year,
                          @RequestParam("country") String country,
@@ -58,11 +61,18 @@ public class MainController {
         return filmsDao.save(film);
     }
 
+      @PostMapping("/getbyid")
+      @CrossOrigin(origins = "http://localhost:4200")
+      public Films getById(@RequestBody Long id){
+        System.out.println(filmsDao.getOne(id).toString());
+      return filmsDao.getOne(id);
+    }
+
     @PostMapping("/delfilm")
     @CrossOrigin(origins = "http://localhost:4200")
     public List<Films> delFilm(@RequestBody Long filmId){
         filmsDao.deleteById(filmId);
-        return  filmsDao.findAll();
+        return filmsDao.findAll();
     }
 
 
@@ -85,6 +95,8 @@ public class MainController {
     public String get(){
         return "get it";
     }
+
+
 
     @GetMapping("/logout")
     public String logout(){
