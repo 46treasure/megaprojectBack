@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,6 +26,7 @@ public class Films {
     private String aboutFilm;
     private String country;
     private String quality;
+    private ArrayList<String> genre;
     private String picture;
     private String movie;
 
