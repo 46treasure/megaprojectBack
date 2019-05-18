@@ -47,11 +47,7 @@ public class MainController {
                          @RequestParam("country") String country,
                          @RequestParam("aboutFilm") String aboutFilm,
                          @RequestParam("quality") String quality ,
-                         BindingResult bindingResult,
                          @RequestParam("picture") MultipartFile picture){
-        if(bindingResult.hasErrors()) {
-            return null;
-        }
         Films film = new Films(name, year, aboutFilm, country, quality);
         filmService.transferTo(picture);
         film.setPicture(path + picture.getOriginalFilename());
