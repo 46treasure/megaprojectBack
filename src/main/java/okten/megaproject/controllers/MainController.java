@@ -1,30 +1,31 @@
 package okten.megaproject.controllers;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import okten.megaproject.Configurations.LoginFilter;
 import okten.megaproject.Service.FilmService;
 import okten.megaproject.dao.FilmsDao;
 import okten.megaproject.dao.UserDao;
-import okten.megaproject.models.AccountCredentials;
 import okten.megaproject.models.Films;
 import okten.megaproject.models.User;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class MainController {
-    String path = System.getProperty("user.home") + File.separator + "FilmImages" + File.separator;
+    String path = "http://127.0.0.1:8887/";
 
     @Autowired
     FilmsDao filmsDao;
@@ -34,31 +35,51 @@ public class MainController {
     UserDao userDao;
 
     @GetMapping("/")
-    @CrossOrigin(origins = "http://localhost:4200")
     public List<Films> allFilms() {
-        System.out.println(filmsDao.findAll());
         return filmsDao.findAll();
     }
 
     @PostMapping("/addfilm")
-    @CrossOrigin(origins = "http://localhost:4200")
+
     public Films addFilm(@RequestParam("name") String name,
                          @RequestParam("year") String year,
                          @RequestParam("country") String country,
                          @RequestParam("aboutFilm") String aboutFilm,
                          @RequestParam("quality") String quality ,
-                         @RequestParam("picture") MultipartFile picture){
+                         @RequestParam("genre") String genre ,
+                         @RequestParam("picture") MultipartFile picture,
+                         @RequestParam("movie") MultipartFile movie){
+         System.out.println(genre);
+         ArrayList<String> genres = new ArrayList<>();
+         for(String rev: genre.split(","))
+             genres.add(rev);
+        System.out.println(genres);
         Films film = new Films(name, year, aboutFilm, country, quality);
         filmService.transferTo(picture);
+        film.setGenre(genres);
         film.setPicture(path + picture.getOriginalFilename());
+        filmService.transferTo(movie);
+        film.setMovie(path + movie.getOriginalFilename());
         return filmsDao.save(film);
     }
+
+      @PostMapping("/getbyid")
+      @CrossOrigin(origins = "http://localhost:4200")
+      public Films getById(@RequestBody Long id){
+        System.out.println(filmsDao.getOne(id).toString());
+      return filmsDao.getOne(id);
+    }
+    @PostMapping("/findByGenre")
+    public List<Films> findByGenre (@RequestBody String genre) {
+        return filmService.findByGenre(genre);
+    }
+
 
     @PostMapping("/delfilm")
     @CrossOrigin(origins = "http://localhost:4200")
     public List<Films> delFilm(@RequestBody Long filmId){
         filmsDao.deleteById(filmId);
-        return  filmsDao.findAll();
+        return filmsDao.findAll();
     }
 
 
@@ -81,6 +102,8 @@ public class MainController {
     public String get(){
         return "get it";
     }
+
+
 
     @GetMapping("/logout")
     public String logout(){
