@@ -23,8 +23,8 @@ public class User implements UserDetails {
     private String email;
     private UserEnum userEnum = UserEnum.ROLE_USER;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Films> usersFilms;
+    //@ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "films")
+    //private List<Films> films;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

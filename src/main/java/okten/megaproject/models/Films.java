@@ -3,10 +3,7 @@ package okten.megaproject.models;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +26,8 @@ public class Films {
     private ArrayList<String> genre;
     private String picture;
     private String movie;
-
+    //@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //private User user;
     public Films(String name, String year, String aboutFilm, String country, String quality) {
         this.name = name;
         this.year = year;
