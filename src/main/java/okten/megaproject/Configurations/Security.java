@@ -70,6 +70,7 @@ public class Security extends WebSecurityConfigurerAdapter {
                 HttpMethod.PUT.name(),
                 HttpMethod.DELETE.name()));
         corsConfiguration.addExposedHeader("Authorization");
+        corsConfiguration.addExposedHeader("CurrentUser");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;

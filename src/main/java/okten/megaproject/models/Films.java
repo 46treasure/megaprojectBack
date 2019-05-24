@@ -1,21 +1,19 @@
 package okten.megaproject.models;
 
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
+@EqualsAndHashCode
 @NoArgsConstructor
-@ToString
 public class Films {
 
     @Id
@@ -29,6 +27,9 @@ public class Films {
     private ArrayList<String> genre;
     private String picture;
     private String movie;
+    @ManyToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private User user;
 
     public Films(String name, String year, String aboutFilm, String country, String quality) {
         this.name = name;
@@ -36,6 +37,21 @@ public class Films {
         this.aboutFilm = aboutFilm;
         this.country = country;
         this.quality = quality;
+    }
+
+    @Override
+    public String toString() {
+        return "Films{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", year='" + year + '\'' +
+                ", aboutFilm='" + aboutFilm + '\'' +
+                ", country='" + country + '\'' +
+                ", quality='" + quality + '\'' +
+                ", genre=" + genre +
+                ", picture='" + picture + '\'' +
+                ", movie='" + movie + '\'' +
+                '}';
     }
 }
 
