@@ -104,9 +104,10 @@ public class MainController {
     @GetMapping("/get")
     public String get(){
         String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        if (authentication.equals("anonymous")){
-            return "anonymous";
-        }else
+//        if (authentication.equals("anonymous")){
+//            return "anonymous";
+//        }else
+
         return authentication;
 }
 
