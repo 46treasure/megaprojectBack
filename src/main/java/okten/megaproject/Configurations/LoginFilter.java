@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +44,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
 
 
+
+
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 
@@ -68,11 +72,11 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         String jwtoken = Jwts.builder()
                 .setSubject(auth.getName())
                 .signWith(SignatureAlgorithm.HS512, "yes".getBytes())
-                .setExpiration(new Date(System.currentTimeMillis() + 200000))
+                .setExpiration(new Date(System.currentTimeMillis() + 100000000))
                 .compact();
         //and add it to header
         res.addHeader("Authorization", "Bearer " + jwtoken);
-
+        res.addHeader("CurrentUser", auth.getName());
     }
 }
 

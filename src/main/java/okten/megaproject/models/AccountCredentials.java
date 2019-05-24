@@ -1,7 +1,5 @@
 package okten.megaproject.models;
 
-import lombok.Data;
-
 import java.util.Objects;
 
 

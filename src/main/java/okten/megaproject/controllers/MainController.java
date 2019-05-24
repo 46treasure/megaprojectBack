@@ -5,6 +5,7 @@ import okten.megaproject.Configurations.LoginFilter;
 import okten.megaproject.Service.FilmService;
 import okten.megaproject.dao.FilmsDao;
 import okten.megaproject.dao.UserDao;
+import okten.megaproject.models.AccountCredentials;
 import okten.megaproject.models.Films;
 import okten.megaproject.models.User;
 import org.json.JSONObject;
@@ -33,6 +34,8 @@ public class MainController {
     FilmService filmService;
     @Autowired
     UserDao userDao;
+
+    AccountCredentials credentials;
 
     @GetMapping("/")
     public List<Films> allFilms() {
@@ -100,24 +103,16 @@ public class MainController {
     }
     @GetMapping("/get")
     public String get(){
-        return "get it";
+        String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        if (authentication.equals("anonymous")){
+            return "anonymous";
+        }else
+        return authentication;
+}
+
+    @PostMapping("/adduserfilm")
+    public List<Films> addUserFilm(@RequestBody User user, @RequestBody Films film){
+        return filmService.addUserFilm(user, film);
     }
 
-
-
-    @GetMapping("/logout")
-    public String logout(){
-        return "logouted";
-    }
-//    @PostMapping("/login")
-//    @CrossOrigin(origins = "http://localhost:4200")
-//    public Authentication login(@RequestBody User user) {
-//        User user1 = userDao.findByUsername(user.getUsername());
-//        AccountCredentials creds = new AccountCredentials();
-//        if (creds.getUsername().equals(user1.getUsername())) {
-//            Authentication authentication = new UsernamePasswordAuthenticationToken(creds.getUsername(), creds.getPassword(), Collections.emptyList());
-//            return authentication;
-//        }else
-//            return null;
-//    }
 }
