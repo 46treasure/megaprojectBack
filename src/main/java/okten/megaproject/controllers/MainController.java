@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
+
 @RestController
 public class MainController {
     String path = "http://127.0.0.1:8887/";
@@ -56,7 +58,6 @@ public class MainController {
          ArrayList<String> genres = new ArrayList<>();
          for(String rev: genre.split(","))
              genres.add(rev);
-        System.out.println(genres);
         Films film = new Films(name, year, aboutFilm, country, quality);
         filmService.transferTo(picture);
         film.setGenre(genres);
@@ -69,7 +70,6 @@ public class MainController {
       @PostMapping("/getbyid")
       @CrossOrigin(origins = "http://localhost:4200")
       public Films getById(@RequestBody Long id){
-        System.out.println(filmsDao.getOne(id).toString());
       return filmsDao.getOne(id);
     }
     @PostMapping("/findByGenre")
@@ -103,17 +103,31 @@ public class MainController {
     }
     @GetMapping("/get")
     public String get(){
+
         String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-//        if (authentication.equals("anonymous")){
-//            return "anonymous";
-//        }else
+
+
 
         return authentication;
 }
 
     @PostMapping("/adduserfilm")
-    public List<Films> addUserFilm(@RequestBody User user, @RequestBody Films film){
-        return filmService.addUserFilm(user, film);
+    public List<Films> addUserFilm(@RequestBody Long idFilm)  {
+        String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        System.out.println(idFilm);
+        System.out.println("AUTH" + authentication);
+        User byUsername = userDao.findByUsername(authentication);
+        List<Films> usersFilms = byUsername.getUsersFilms();//byUsername.getUsersFilms();
+        Films one = filmsDao.getOne(idFilm);
+        usersFilms.add(one);
+        List<User> userss = one.getUser();
+        userss.add(byUsername);
+        one.setUser(userss);
+        byUsername.setUsersFilms(usersFilms);
+        System.out.println("_______________________________________");
+        System.out.println(byUsername.toString());
+        userDao.save(byUsername);
+        return usersFilms;
     }
 
 }

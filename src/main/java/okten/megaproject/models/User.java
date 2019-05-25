@@ -1,6 +1,9 @@
 package okten.megaproject.models;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +12,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -26,10 +28,10 @@ public class User implements UserDetails {
     private String email;
     private UserEnum userEnum = UserEnum.ROLE_USER;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "user")
-    private List<Films> usersFilms;
+    @ManyToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+
+    private List<Films> usersFilms = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

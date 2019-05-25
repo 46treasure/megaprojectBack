@@ -1,6 +1,7 @@
 package okten.megaproject.models;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,9 +29,9 @@ public class Films {
     private ArrayList<String> genre;
     private String picture;
     private String movie;
-    @ManyToOne(cascade = CascadeType.ALL,
+    @ManyToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
-    private User user;
+    private List<User> user = new ArrayList<>();
 
     public Films(String name, String year, String aboutFilm, String country, String quality) {
         this.name = name;
@@ -53,6 +55,7 @@ public class Films {
                 ", movie='" + movie + '\'' +
                 '}';
     }
+
 }
 
 
