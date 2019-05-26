@@ -112,21 +112,17 @@ public class MainController {
 }
 
     @PostMapping("/adduserfilm")
-    public List<Films> addUserFilm(@RequestBody Long idFilm)  {
-        String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        System.out.println(idFilm);
-        System.out.println("AUTH" + authentication);
-        User byUsername = userDao.findByUsername(authentication);
-        List<Films> usersFilms = byUsername.getUsersFilms();//byUsername.getUsersFilms();
+    public List<Films> addUserFilm(@RequestBody Long idFilm){
+        String auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        User byUsername = userDao.findByUsername(auth);
+        List<Films> usersFilms = byUsername.getUsersFilms();
         Films one = filmsDao.getOne(idFilm);
         usersFilms.add(one);
-        List<User> userss = one.getUser();
-        userss.add(byUsername);
-        one.setUser(userss);
+        List<User> users = one.getUser();
+        one.setUser(users);
         byUsername.setUsersFilms(usersFilms);
-        System.out.println("_______________________________________");
-        System.out.println(byUsername.toString());
         userDao.save(byUsername);
+        filmsDao.save(one);
         return usersFilms;
     }
 }
