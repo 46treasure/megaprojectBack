@@ -125,4 +125,12 @@ public class MainController {
         filmsDao.save(one);
         return usersFilms;
     }
+    @GetMapping("/userpage-userfilms")
+    public List<Films> getUserFilm(){
+        String auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        User byUsername = userDao.findByUsername(auth);
+        List<Films> usersFilms = byUsername.getUsersFilms();
+        System.out.println(usersFilms);
+        return usersFilms;
+    }
 }
