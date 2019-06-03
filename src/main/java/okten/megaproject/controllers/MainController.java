@@ -10,7 +10,6 @@ import okten.megaproject.models.Films;
 import okten.megaproject.models.User;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,14 +50,14 @@ public class MainController {
                          @RequestParam("year") String year,
                          @RequestParam("country") String country,
                          @RequestParam("aboutFilm") String aboutFilm,
-                         @RequestParam("quality") String quality,
-                         @RequestParam("genre") String genre,
+                         @RequestParam("quality") String quality ,
+                         @RequestParam("genre") String genre ,
                          @RequestParam("picture") MultipartFile picture,
-                         @RequestParam("movie") MultipartFile movie) {
-        System.out.println(genre);
-        ArrayList<String> genres = new ArrayList<>();
-        for (String rev : genre.split(","))
-            genres.add(rev);
+                         @RequestParam("movie") MultipartFile movie){
+         System.out.println(genre);
+         ArrayList<String> genres = new ArrayList<>();
+         for(String rev: genre.split(","))
+             genres.add(rev);
         Films film = new Films(name, year, aboutFilm, country, quality);
         filmService.transferTo(picture);
         film.setGenre(genres);
@@ -68,22 +67,20 @@ public class MainController {
         return filmsDao.save(film);
     }
 
-    @PostMapping("/getbyid")
-    @CrossOrigin(origins = "http://localhost:4200")
-    public Films getById(@RequestBody Long id) {
-        return filmsDao.getOne(id);
+      @PostMapping("/getbyid")
+      @CrossOrigin(origins = "http://localhost:4200")
+      public Films getById(@RequestBody Long id){
+      return filmsDao.getOne(id);
     }
-
-
     @PostMapping("/findByGenre")
-    public List<Films> findByGenre(@RequestBody String genre) {
+    public List<Films> findByGenre (@RequestBody String genre) {
         return filmService.findByGenre(genre);
     }
 
 
     @PostMapping("/delfilm")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<Films> delFilm(@RequestBody Long filmId) {
+    public List<Films> delFilm(@RequestBody Long filmId){
         filmsDao.deleteById(filmId);
         return filmsDao.findAll();
     }
@@ -104,15 +101,14 @@ public class MainController {
             return true;
         }
     }
-
     @GetMapping("/get")
-    public String get() {
+    public String get(){
         String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         return authentication;
-    }
+}
 
     @PostMapping("/adduserfilm")
-    public List<Films> addUserFilm(@RequestBody Long idFilm) {
+    public List<Films> addUserFilm(@RequestBody Long idFilm){
         String auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         User byUsername = userDao.findByUsername(auth);
         List<Films> usersFilms = byUsername.getUsersFilms();
@@ -125,17 +121,12 @@ public class MainController {
         filmsDao.save(one);
         return usersFilms;
     }
-
-    @PostMapping("/search")
-    public List<Films> searchFilm(@RequestBody String filmName) {
-        System.out.println(filmName + "!!!!!!!!!!!!!!!");
-        List<Films> findedFilms = new ArrayList<>();
-        List<Films> all = filmsDao.findAll();
-        for (int i = 0; i < all.size(); i++) {
-             if (all.get(i).getName().contains(filmName)){
-                 findedFilms.add(all.get(i));
-             }
-        }
-        return findedFilms;
+    @GetMapping("/userpage-userfilms")
+    public List<Films> getUserFilm(){
+        String auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        User byUsername = userDao.findByUsername(auth);
+        List<Films> usersFilms = byUsername.getUsersFilms();
+        System.out.println(usersFilms);
+        return usersFilms;
     }
 }
