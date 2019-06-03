@@ -132,10 +132,11 @@ public class MainController {
         List<Films> findedFilms = new ArrayList<>();
         List<Films> all = filmsDao.findAll();
         for (int i = 0; i < all.size(); i++) {
-             if (all.get(i).getName().contains(filmName)){
-                 findedFilms.add(all.get(i));
-             }
+            if (all.get(i).getName().contains(filmName)) {
+                findedFilms.add(all.get(i));
+            }
         }
         return findedFilms;
     }
 }
+
