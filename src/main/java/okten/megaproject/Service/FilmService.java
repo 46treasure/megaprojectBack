@@ -40,13 +40,4 @@ public class FilmService {
         return finded;
     }
 
-//    public List<Films> addUserFilm(User user, Films film) {
-//        List<Films> usersFilms = user.getUsersFilms();
-//        film.setUser(user);
-//        usersFilms.add(film);
-//        return usersFilms;
-//
-//    }
-
-//    weijfewi
 }
