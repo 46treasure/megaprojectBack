@@ -101,10 +101,11 @@ public class MainController {
             return true;
         }
     }
+    private User current = new User();
     @GetMapping("/get")
     public User get(){
         String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User current = userDao.findByUsername(authentication);
+        current = userDao.findByUsername(authentication);
         return current;
 }
 
@@ -131,8 +132,24 @@ public class MainController {
         System.out.println(usersFilms);
         return usersFilms;
     }
+    private User thisUser = new User();
     @PostMapping("/getUserById")
     public User getUserById(@RequestBody int id){
-        return userDao.getOne(id);
+        thisUser = userDao.getOne(id);
+        return thisUser;
+    }
+    @GetMapping("/currentPage")
+    public boolean currentPage (){
+
+        System.out.println(current + "buserName");
+        System.out.println(thisUser + "thisUser");
+        if(thisUser.equals(current)){
+            System.out.println("TRUEEE");
+            return true;
+        }
+        else {
+            System.out.println("FALSEE");
+            return false;
+        }
     }
 }
