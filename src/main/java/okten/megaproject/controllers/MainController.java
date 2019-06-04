@@ -133,7 +133,6 @@ public class MainController {
     }
     @PostMapping("/getUserById")
     public User getUserById(@RequestBody int id){
-        System.out.println(userDao.getOne(id));
         return userDao.getOne(id);
     }
 }
