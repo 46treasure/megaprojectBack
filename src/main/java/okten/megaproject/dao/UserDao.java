@@ -7,9 +7,14 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserDao extends JpaRepository<User, Integer> {
 
+
+    @Override
+    User getOne(Integer id);
     User findByUsername(String username);
     User findByPassword(String password);
 
     @Query("select u from User u where u.username=:name")
     User loadByUsername(@Param("name")String name);
+
+
 }

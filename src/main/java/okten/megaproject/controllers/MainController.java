@@ -102,9 +102,10 @@ public class MainController {
         }
     }
     @GetMapping("/get")
-    public String get(){
+    public User get(){
         String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        return authentication;
+        User current = userDao.findByUsername(authentication);
+        return current;
 }
 
     @PostMapping("/adduserfilm")
@@ -129,5 +130,10 @@ public class MainController {
         List<Films> usersFilms = byUsername.getUsersFilms();
         System.out.println(usersFilms);
         return usersFilms;
+    }
+    @PostMapping("/getUserById")
+    public User getUserById(@RequestBody int id){
+        System.out.println(userDao.getOne(id));
+        return userDao.getOne(id);
     }
 }
