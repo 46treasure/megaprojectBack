@@ -97,6 +97,8 @@ public class MainController {
         if (userDb != null) {
             return false;
         } else {
+            ArrayList<Integer> sub = new ArrayList<>();
+            user.setSubscribes(sub);
             userDao.save(user);
             return true;
         }
@@ -138,12 +140,10 @@ public class MainController {
         thisUser = userDao.getOne(id);
         return thisUser;
     }
-    @GetMapping("/currentPage")
-    public boolean currentPage (){
-
+    @PostMapping("/currentPage")
+    public boolean currentPage (@RequestBody int id){
         System.out.println(current + "buserName");
-        System.out.println(thisUser + "thisUser");
-        if(thisUser.equals(current)){
+        if(current.getId() == id){
             System.out.println("TRUEEE");
             return true;
         }
@@ -151,5 +151,27 @@ public class MainController {
             System.out.println("FALSEE");
             return false;
         }
+    }
+    @PostMapping("/subscribe")
+    public int subscribe (@RequestBody int id){
+        User byId = userDao.getOne(id);
+        ArrayList<Integer> subscribes = byId.getSubscribes();
+        subscribes.add(current.getId());
+        byId.setSubscribes(subscribes);
+        userDao.save(byId);
+        System.out.println(byId.getSubscribes());
+        return 5;
+    }
+
+    @PostMapping("/friends")
+    public  ArrayList<User> friends (@RequestBody int id){
+        User one = userDao.getOne(id);
+        ArrayList<Integer> subscribes = one.getSubscribes();
+        System.out.println(subscribes);
+        ArrayList<User> friends = new ArrayList<>();
+        for (Integer subscribe : subscribes) {
+            friends.add(userDao.getOne(subscribe));
+        }
+        return friends;
     }
 }
