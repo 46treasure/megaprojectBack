@@ -27,11 +27,12 @@ public class User implements UserDetails {
     private String password;
     private String email;
     private UserEnum userEnum = UserEnum.ROLE_USER;
-
+    private ArrayList<Integer> subscribes = new ArrayList<>();
     @ManyToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
 
     private List<Films> usersFilms = new ArrayList<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -77,10 +78,7 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", userEnum=" + userEnum +
-                ", isAccountNonExpired=" + isAccountNonExpired +
-                ", isAccountNonLocked=" + isAccountNonLocked +
-                ", isCredentialsNonExpired=" + isCredentialsNonExpired +
-                ", isEnabled=" + isEnabled +
+                ", subscribes=" + subscribes +
                 '}';
     }
 }
