@@ -98,6 +98,8 @@ public class MainController {
             return false;
         } else {
             ArrayList<Integer> sub = new ArrayList<>();
+            ArrayList<Integer> folow = new ArrayList<>();
+            user.setFolowing(folow);
             user.setSubscribes(sub);
             userDao.save(user);
             return true;
@@ -126,10 +128,9 @@ public class MainController {
         return usersFilms;
     }
 //    sgfvasdsadsda
-    @GetMapping("/userpage-userfilms")
-    public List<Films> getUserFilm(){
-        String auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User byUsername = userDao.findByUsername(auth);
+    @PostMapping("/userpage-userfilms")
+    public List<Films> getUserFilm(@RequestBody int id){
+         User byUsername = userDao.getOne(id);
         List<Films> usersFilms = byUsername.getUsersFilms();
         System.out.println(usersFilms);
         return usersFilms;
@@ -159,7 +160,9 @@ public class MainController {
         subscribes.add(current.getId());
         byId.setSubscribes(subscribes);
         userDao.save(byId);
-        System.out.println(byId.getSubscribes());
+        ArrayList<Integer> folowing = current.getFolowing();
+        folowing.add(id);
+        userDao.save(current);
         return 5;
     }
 
@@ -167,11 +170,11 @@ public class MainController {
     public  ArrayList<User> friends (@RequestBody int id){
         User one = userDao.getOne(id);
         ArrayList<Integer> subscribes = one.getSubscribes();
-        System.out.println(subscribes);
         ArrayList<User> friends = new ArrayList<>();
         for (Integer subscribe : subscribes) {
             friends.add(userDao.getOne(subscribe));
         }
+        System.out.println("12312312312312" + current.getFolowing());
         return friends;
     }
 }
