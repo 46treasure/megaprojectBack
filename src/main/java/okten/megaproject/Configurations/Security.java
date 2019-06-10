@@ -57,6 +57,8 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .antMatchers("/get").authenticated()
                 .antMatchers(HttpMethod.POST,"/adduserfilm").authenticated()
                 .antMatchers(HttpMethod.POST,"/userpage-userfilms").authenticated()
+                .antMatchers(HttpMethod.POST,"/deluserfilms").permitAll()
+                .antMatchers(HttpMethod.POST,"/setAvatar").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new RequestProcessingJWTFilter(), UsernamePasswordAuthenticationFilter.class)

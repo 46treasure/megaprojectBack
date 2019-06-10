@@ -26,6 +26,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String email;
+    private String avatar;
     private UserEnum userEnum = UserEnum.ROLE_USER;
     private ArrayList<Integer> subscribes = new ArrayList<>();
     private ArrayList<Integer> folowing = new ArrayList<>();
@@ -78,8 +79,14 @@ public class User implements UserDetails {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", userEnum=" + userEnum +
                 ", subscribes=" + subscribes +
+                ", folowing=" + folowing +
+                ", isAccountNonExpired=" + isAccountNonExpired +
+                ", isAccountNonLocked=" + isAccountNonLocked +
+                ", isCredentialsNonExpired=" + isCredentialsNonExpired +
+                ", isEnabled=" + isEnabled +
                 '}';
     }
 }

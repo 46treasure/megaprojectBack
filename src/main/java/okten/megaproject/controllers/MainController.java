@@ -1,30 +1,21 @@
 package okten.megaproject.controllers;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import okten.megaproject.Configurations.LoginFilter;
 import okten.megaproject.Service.FilmService;
+import okten.megaproject.Service.UserService;
 import okten.megaproject.dao.FilmsDao;
 import okten.megaproject.dao.UserDao;
 import okten.megaproject.models.AccountCredentials;
 import okten.megaproject.models.Films;
 import okten.megaproject.models.User;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 
 @RestController
 public class MainController {
@@ -36,6 +27,9 @@ public class MainController {
     FilmService filmService;
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    UserService userService;
 
     AccountCredentials credentials;
 
@@ -72,6 +66,7 @@ public class MainController {
       public Films getById(@RequestBody Long id){
       return filmsDao.getOne(id);
     }
+
     @PostMapping("/findByGenre")
     public List<Films> findByGenre (@RequestBody String genre) {
         return filmService.findByGenre(genre);
@@ -127,12 +122,27 @@ public class MainController {
         filmsDao.save(one);
         return usersFilms;
     }
-//    sgfvasdsadsda
+
+    @PostMapping("/deluserfilms")
+    public List<Films> delUserFilm(@RequestBody long idFilm){
+        List<Films> usersFilms = current.getUsersFilms();
+        Iterator<Films> iterator = usersFilms.iterator();
+        while (iterator.hasNext()){
+            Films next = iterator.next();
+            if (next.getId() == idFilm){
+                iterator.remove();
+                break;
+            }
+        }
+        current.setUsersFilms(usersFilms);
+        userDao.save(current);
+        return usersFilms;
+    }
+
     @PostMapping("/userpage-userfilms")
     public List<Films> getUserFilm(@RequestBody int id){
          User byUsername = userDao.getOne(id);
         List<Films> usersFilms = byUsername.getUsersFilms();
-        System.out.println(usersFilms);
         return usersFilms;
     }
     private User thisUser = new User();
@@ -143,13 +153,10 @@ public class MainController {
     }
     @PostMapping("/currentPage")
     public boolean currentPage (@RequestBody int id){
-        System.out.println(current + "buserName");
         if(current.getId() == id){
-            System.out.println("TRUEEE");
             return true;
         }
         else {
-            System.out.println("FALSEE");
             return false;
         }
     }
@@ -174,7 +181,13 @@ public class MainController {
         for (Integer subscribe : subscribes) {
             friends.add(userDao.getOne(subscribe));
         }
-        System.out.println("12312312312312" + current.getFolowing());
         return friends;
+    }
+
+    @PostMapping("/setAvatar")
+    public void setAva(@RequestParam ("avatar") MultipartFile avatar){
+        userService.saveAva(avatar);
+        userDao.setAvatar(path + avatar.getOriginalFilename(), current.getId());
+
     }
 }

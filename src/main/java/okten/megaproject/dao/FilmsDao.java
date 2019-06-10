@@ -6,9 +6,8 @@ import org.springframework.stereotype.Repository;
 
 
 public interface FilmsDao extends JpaRepository<Films, Long> {
-    Films findFilmsByName(String name);
-
 
     @Override
     Films getOne(Long aLong);
+
 }

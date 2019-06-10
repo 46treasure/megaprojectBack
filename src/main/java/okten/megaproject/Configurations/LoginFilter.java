@@ -72,7 +72,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         String jwtoken = Jwts.builder()
                 .setSubject(auth.getName())
                 .signWith(SignatureAlgorithm.HS512, "yes".getBytes())
-                .setExpiration(new Date(System.currentTimeMillis() + 100000000))
+                .setExpiration(new Date(System.currentTimeMillis() + 999999999))
                 .compact();
         //and add it to header
         res.addHeader("Authorization", "Bearer " + jwtoken);
