@@ -59,6 +59,8 @@ public class MainController {
          for(String rev: genre.split(","))
              genres.add(rev);
         Films film = new Films(name, year, aboutFilm, country, quality);
+        ArrayList<Integer> listRating = new ArrayList<>();
+        film.setRating(listRating);
         filmService.transferTo(picture);
         film.setGenre(genres);
         film.setPicture(path + picture.getOriginalFilename());
@@ -134,6 +136,22 @@ public class MainController {
         List<Films> usersFilms = byUsername.getUsersFilms();
         System.out.println(usersFilms);
         return usersFilms;
+    }
+    @PostMapping("/rating")
+    public double rating (@RequestParam("idFilm") Long id, @RequestParam("rating") int rat){
+        int sum = 0;
+        double res;
+        Films one = filmsDao.getOne(id);
+        ArrayList<Integer> rating = one.getRating();
+        rating.add(rat);
+        one.setRating(rating);
+        for (Integer integer : rating) {
+            sum = sum + integer;
+        }
+        res =(double) sum / (double)rating.size();
+        one.setScore(res);
+        filmsDao.save(one);
+        return res;
     }
     private User thisUser = new User();
     @PostMapping("/getUserById")
