@@ -65,7 +65,7 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new RequestProcessingJWTFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new LoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class);
 
-
+//gh
     }
 
     @Bean
