@@ -146,6 +146,24 @@ public class MainController {
         return usersFilms;
     }
 
+    @PostMapping("/rating")
+    public double rating (@RequestParam("idFilm") Long id, @RequestParam("rating") int rat){
+        int sum = 0;
+        double res;
+        Films one = filmsDao.getOne(id);
+        ArrayList<Integer> rating = one.getRating();
+        rating.add(rat);
+        one.setRating(rating);
+        for (Integer integer : rating) {
+            sum = sum + integer;
+        }
+        res =(double) sum / (double)rating.size();
+        one.setScore(res);
+        filmsDao.save(one);
+        return res;
+        //ss
+    }
+
     @PostMapping("/getUserfilmsLength")
     public int getLength(@RequestBody int id){
         List<Films> usersFilms = current.getUsersFilms();
