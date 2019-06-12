@@ -107,6 +107,8 @@ public class MainController {
     public User get(){
         String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         current = userDao.findByUsername(authentication);
+        current.setStatus("Online");
+        userDao.save(current);
         return current;
 }
 
@@ -218,5 +220,13 @@ public class MainController {
         userService.saveAva(avatar);
         userDao.setAvatar(path + avatar.getOriginalFilename(), current.getId());
 
+    }
+
+    @GetMapping("/close")
+    public void close (){
+        System.out.println("Closeee!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        current.setStatus("offline");
+        userDao.save(current);
+        System.out.println("teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     }
 }
