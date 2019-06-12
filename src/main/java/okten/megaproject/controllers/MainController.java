@@ -53,6 +53,8 @@ public class MainController {
          for(String rev: genre.split(","))
              genres.add(rev);
         Films film = new Films(name, year, aboutFilm, country, quality);
+        ArrayList<Integer> listRating = new ArrayList<>();
+        film.setRating(listRating);
         filmService.transferTo(picture);
         film.setGenre(genres);
         film.setPicture(path + picture.getOriginalFilename());
