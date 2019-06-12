@@ -188,6 +188,8 @@ public class MainController {
         for (Integer subscribe : subscribes) {
             friends.add(userDao.getOne(subscribe));
         }
+
+        System.out.println(subscribes);
         return friends;
     }
 
