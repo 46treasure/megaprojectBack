@@ -145,6 +145,13 @@ public class MainController {
         List<Films> usersFilms = byUsername.getUsersFilms();
         return usersFilms;
     }
+
+    @PostMapping("/getUserfilmsLength")
+    public int getLength(@RequestBody int id){
+        List<Films> usersFilms = current.getUsersFilms();
+        return usersFilms.size();
+    }
+
     private User thisUser = new User();
     @PostMapping("/getUserById")
     public User getUserById(@RequestBody int id){
