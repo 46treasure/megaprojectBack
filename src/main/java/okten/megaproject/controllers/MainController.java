@@ -33,10 +33,10 @@ public class MainController {
 
     AccountCredentials credentials;
 
-//    @GetMapping("/")
-//    public List<Films> allFilms() {
-//        return filmsDao.findAll();
-//    }
+    @GetMapping("/")
+    public List<Films> allFilms() {
+        return filmsDao.findAll();
+    }
 
     @PostMapping("/addfilm")
 
