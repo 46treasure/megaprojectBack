@@ -224,9 +224,12 @@ public class MainController {
 
     @GetMapping("/close")
     public void close (){
-        System.out.println("Closeee!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         current.setStatus("offline");
         userDao.save(current);
-        System.out.println("teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+    }
+
+    @PostMapping("/search")
+    public List<Films> search(@RequestBody String name){
+        return filmService.searchFilms(name);
     }
 }

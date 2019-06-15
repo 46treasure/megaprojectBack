@@ -40,4 +40,18 @@ public class FilmService {
         return finded;
     }
 
+    public List<Films> searchFilms(String name){
+        String s = name.toLowerCase();
+        List<Films> all = filmsDao.findAll();
+        List<Films> finded = new ArrayList<>();
+        for (int i = 0; i < all.size(); i++) {
+            String s1 = all.get(i).getName().toLowerCase();
+            if (s1.contains(s)) {
+                finded.add(all.get(i));
+            }
+        }
+        System.out.println(finded);
+        return finded;
+    }
+
 }
