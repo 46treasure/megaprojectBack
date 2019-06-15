@@ -53,6 +53,8 @@ public class MainController {
          for(String rev: genre.split(","))
              genres.add(rev);
         Films film = new Films(name, year, aboutFilm, country, quality);
+        ArrayList<Integer> listRating = new ArrayList<>();
+        film.setRating(listRating);
         filmService.transferTo(picture);
         film.setGenre(genres);
         film.setPicture(path + picture.getOriginalFilename());
@@ -105,6 +107,8 @@ public class MainController {
     public User get(){
         String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         current = userDao.findByUsername(authentication);
+        current.setStatus("Online");
+        userDao.save(current);
         return current;
 }
 
@@ -144,6 +148,24 @@ public class MainController {
          User byUsername = userDao.getOne(id);
         List<Films> usersFilms = byUsername.getUsersFilms();
         return usersFilms;
+    }
+
+    @PostMapping("/rating")
+    public double rating (@RequestParam("idFilm") Long id, @RequestParam("rating") int rat){
+        int sum = 0;
+        double res;
+        Films one = filmsDao.getOne(id);
+        ArrayList<Integer> rating = one.getRating();
+        rating.add(rat);
+        one.setRating(rating);
+        for (Integer integer : rating) {
+            sum = sum + integer;
+        }
+        res =(double) sum / (double)rating.size();
+        one.setScore(res);
+        filmsDao.save(one);
+        return res;
+        //ss
     }
 
     @PostMapping("/getUserfilmsLength")
@@ -188,6 +210,8 @@ public class MainController {
         for (Integer subscribe : subscribes) {
             friends.add(userDao.getOne(subscribe));
         }
+
+        System.out.println(subscribes);
         return friends;
     }
 
@@ -196,5 +220,13 @@ public class MainController {
         userService.saveAva(avatar);
         userDao.setAvatar(path + avatar.getOriginalFilename(), current.getId());
 
+    }
+
+    @GetMapping("/close")
+    public void close (){
+        System.out.println("Closeee!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        current.setStatus("offline");
+        userDao.save(current);
+        System.out.println("teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     }
 }

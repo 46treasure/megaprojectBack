@@ -29,6 +29,8 @@ public class Films {
     private ArrayList<String> genre;
     private String picture;
     private String movie;
+    private ArrayList<Integer> rating;
+    private double score;
     @ManyToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<User> user = new ArrayList<>();

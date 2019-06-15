@@ -27,6 +27,7 @@ public class User implements UserDetails {
     private String password;
     private String email;
     private String avatar;
+    private String status = "offline";
     private UserEnum userEnum = UserEnum.ROLE_USER;
     private ArrayList<Integer> subscribes = new ArrayList<>();
     private ArrayList<Integer> folowing = new ArrayList<>();
