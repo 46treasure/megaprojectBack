@@ -94,6 +94,7 @@ public class MainController {
         if (userDb != null) {
             return false;
         } else {
+            user.setAvatar("assets/ava.jpg");
             ArrayList<Integer> sub = new ArrayList<>();
             ArrayList<Integer> folow = new ArrayList<>();
             user.setFolowing(folow);
@@ -190,7 +191,7 @@ public class MainController {
         }
     }
     @PostMapping("/subscribe")
-    public int subscribe (@RequestBody int id){
+    public void subscribe (@RequestBody int id){
         User byId = userDao.getOne(id);
         ArrayList<Integer> subscribes = byId.getSubscribes();
         subscribes.add(current.getId());
@@ -199,10 +200,10 @@ public class MainController {
         ArrayList<Integer> folowing = current.getFolowing();
         folowing.add(id);
         userDao.save(current);
-        return 5;
+        System.out.println(byId.getSubscribes());
     }
 
-    @PostMapping("/friends")
+    @PostMapping("/getSubscribers")
     public  ArrayList<User> friends (@RequestBody int id){
         User one = userDao.getOne(id);
         ArrayList<Integer> subscribes = one.getSubscribes();
@@ -213,6 +214,17 @@ public class MainController {
 
         System.out.println(subscribes);
         return friends;
+    }
+
+    @PostMapping("/getFolowing")
+    public  ArrayList<User> folowing (@RequestBody int id){
+        User one = userDao.getOne(id);
+        ArrayList<Integer> folowing = one.getFolowing();
+        ArrayList<User> folow = new ArrayList<>();
+        for (Integer folower : folowing) {
+            folow.add(userDao.getOne(folower));
+        }
+        return folow;
     }
 
     @PostMapping("/setAvatar")
