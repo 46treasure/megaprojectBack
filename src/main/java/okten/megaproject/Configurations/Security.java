@@ -53,6 +53,8 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/getUserById").permitAll()
                 .antMatchers(HttpMethod.POST, "/currentPage").permitAll()
                 .antMatchers(HttpMethod.POST, "/subscribe").permitAll()
+                .antMatchers(HttpMethod.POST, "/unSubscribe").permitAll()
+                .antMatchers(HttpMethod.POST, "/exist").permitAll()
                 .antMatchers(HttpMethod.POST, "/getSubscribers").permitAll()
                 .antMatchers(HttpMethod.POST, "/getFolowing").permitAll()
                 .antMatchers(HttpMethod.POST, "/rating").permitAll()

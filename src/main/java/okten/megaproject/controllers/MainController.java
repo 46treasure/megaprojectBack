@@ -55,6 +55,7 @@ public class MainController {
         Films film = new Films(name, year, aboutFilm, country, quality);
         ArrayList<Integer> listRating = new ArrayList<>();
         film.setRating(listRating);
+        film.setScore(0);
         filmService.transferTo(picture);
         film.setGenre(genres);
         film.setPicture(path + picture.getOriginalFilename());
@@ -202,6 +203,25 @@ public class MainController {
         userDao.save(current);
         System.out.println(byId.getSubscribes());
     }
+    @PostMapping("/unSubscribe")
+    public void unSubscribe(@RequestBody int id){
+        User byId = userDao.getOne(id);
+        ArrayList<Integer> subscribes = byId.getSubscribes();
+        Integer currentID = current.getId();
+        if(subscribes.contains(currentID)) {
+            subscribes.remove(currentID);
+            byId.setSubscribes(subscribes);
+            userDao.save(byId);
+        }
+        ArrayList<Integer> folowing = current.getFolowing();
+        Integer i = id;
+        if(folowing.contains(i)) {
+            folowing.remove(i);
+            current.setFolowing(folowing);
+            userDao.save(current);
+        }
+
+    }
 
     @PostMapping("/getSubscribers")
     public  ArrayList<User> friends (@RequestBody int id){
@@ -214,6 +234,12 @@ public class MainController {
 
         System.out.println(subscribes);
         return friends;
+    }
+    @PostMapping("/exist")
+    public boolean exist (@RequestBody int id){
+        ArrayList<Integer> following = current.getFolowing();
+        return following.contains(id);
+
     }
 
     @PostMapping("/getFolowing")
