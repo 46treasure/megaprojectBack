@@ -201,6 +201,7 @@ public class MainController {
         ArrayList<Integer> folowing = current.getFolowing();
         folowing.add(id);
         userDao.save(current);
+        //ds
         System.out.println(byId.getSubscribes());
     }
     @PostMapping("/unSubscribe")
