@@ -37,6 +37,10 @@ public class MainController {
     public List<Films> allFilms() {
         return filmsDao.findAll();
     }
+    @GetMapping("/topTen")
+    public List<Films> topTen(){
+        return filmService.topTen();
+    }
 
     @PostMapping("/addfilm")
 
@@ -269,5 +273,15 @@ public class MainController {
     @PostMapping("/search")
     public List<Films> search(@RequestBody String name){
         return filmService.searchFilms(name);
+    }
+    
+    @GetMapping("/getAllUsers")
+    public List<User> getAllUsers(){
+        return userDao.findAll();
+    }
+
+    @PostMapping("/findSearchingUser")
+    public List<User> findSearchingFilm(@RequestBody String name){
+        return userService.searchUser(name);
     }
 }
