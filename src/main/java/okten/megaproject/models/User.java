@@ -28,7 +28,8 @@ public class User implements UserDetails {
     private String email;
     private String avatar;
     private String status = "offline";
-    private UserEnum userEnum = UserEnum.ROLE_USER;
+    @Enumerated(EnumType.STRING)
+    private UserEnum role = UserEnum.ROLE_USER;
     private ArrayList<Integer> subscribes = new ArrayList<>();
     private ArrayList<Integer> folowing = new ArrayList<>();
     @ManyToMany(cascade = CascadeType.ALL,
@@ -41,7 +42,7 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(userEnum.name()));
+        authorities.add(new SimpleGrantedAuthority(role.name()));
         return authorities;
     }
 
@@ -81,7 +82,7 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", avatar='" + avatar + '\'' +
-                ", userEnum=" + userEnum +
+                ", Role=" + role +
                 ", subscribes=" + subscribes +
                 ", folowing=" + folowing +
                 ", isAccountNonExpired=" + isAccountNonExpired +
@@ -90,4 +91,5 @@ public class User implements UserDetails {
                 ", isEnabled=" + isEnabled +
                 '}';
     }
+
 }

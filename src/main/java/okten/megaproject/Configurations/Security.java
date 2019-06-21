@@ -21,6 +21,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+
+
 @Configuration
 public class Security extends WebSecurityConfigurerAdapter {
 
@@ -29,9 +31,8 @@ public class Security extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("admin").password(passwordEncoder().encode("pass")).roles("ADMIN");
         auth.userDetailsService(userDetailServiceImpl);
-//            auth.inMemoryAuthentication().withUser("asd").password("{noop}asd").roles("ADMIN");
-//            auth.inMemoryAuthentication().withUser("qwe").password("{noop}qwe").roles("USER");
     }
 
     @Override
@@ -43,7 +44,9 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/topTen").permitAll()
                 .antMatchers(HttpMethod.POST,"/addfilm").permitAll()
+                .antMatchers(HttpMethod.GET,"/getAllUsers").permitAll()
                 .antMatchers(HttpMethod.POST,"/getbyid").permitAll()
                 .antMatchers(HttpMethod.POST,"/delfilm").permitAll()
                 .antMatchers(HttpMethod.POST,"/findByGenre").permitAll()
@@ -51,6 +54,7 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/reg").permitAll()
                 .antMatchers(HttpMethod.POST, "/search").permitAll()
                 .antMatchers(HttpMethod.POST, "/getUserById").permitAll()
+                .antMatchers(HttpMethod.POST, "/findSearchingUser").permitAll()
                 .antMatchers(HttpMethod.POST, "/currentPage").permitAll()
                 .antMatchers(HttpMethod.POST, "/subscribe").permitAll()
                 .antMatchers(HttpMethod.POST, "/unSubscribe").permitAll()
