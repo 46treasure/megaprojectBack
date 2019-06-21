@@ -18,6 +18,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         User user = userDao.findByUsername(username);
         if (user == null || !user.isActive()) {
             throw new UsernameNotFoundException("User '" + username + "' not found");
+
         }
         return userDao.loadByUsername(username);
     }
