@@ -29,7 +29,6 @@ public class User implements UserDetails {
     private String email;
     private String avatar;
     private String status = "offline";
-    private UserEnum userEnum;
     @Enumerated(EnumType.STRING)
     private UserEnum role = UserEnum.ROLE_USER;
     private ArrayList<Integer> subscribes = new ArrayList<>();
@@ -91,7 +90,6 @@ public class User implements UserDetails {
                 ", subscribes=" + subscribes +
                 ", folowing=" + folowing +
                 ", status='" + status + '\'' +
-                ", userEnum=" + userEnum +
                 ", userKey='" + userKey + '\'' +
                 ", isActive=" + isActive +
                 ", isAccountNonExpired=" + isAccountNonExpired +

@@ -105,7 +105,7 @@ public class MainController {
             return false;
         } else {
             user.setAvatar("assets/ava.jpg");
-            user.setUserEnum(UserEnum.ROLE_USER);
+            user.setRole(UserEnum.ROLE_USER);
             ArrayList<Integer> sub = new ArrayList<>();
             ArrayList<Integer> folow = new ArrayList<>();
             user.setFolowing(folow);
