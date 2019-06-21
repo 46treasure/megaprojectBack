@@ -21,6 +21,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+
+
 @Configuration
 public class Security extends WebSecurityConfigurerAdapter {
 
@@ -29,9 +31,8 @@ public class Security extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("admin").password(passwordEncoder().encode("pass")).roles("ADMIN");
         auth.userDetailsService(userDetailServiceImpl);
-//            auth.inMemoryAuthentication().withUser("asd").password("{noop}asd").roles("ADMIN");
-//            auth.inMemoryAuthentication().withUser("qwe").password("{noop}qwe").roles("USER");
     }
 
     @Override
