@@ -42,6 +42,10 @@ public class MainController {
     public List<Films> allFilms() {
         return filmsDao.findAll();
     }
+    @GetMapping("/topTen")
+    public List<Films> topTen(){
+        return filmService.topTen();
+    }
 
     @PostMapping("/addfilm")
 
@@ -94,14 +98,14 @@ public class MainController {
 
     @PostMapping("/reg")
     @CrossOrigin(origins = "http://localhost:4200")
-    public boolean reg(@RequestBody User user){
+    public boolean reg(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userDb = userDao.findByUsername(user.getUsername());
         if (userDb != null) {
             return false;
         } else {
             user.setAvatar("assets/ava.jpg");
-            user.setUserEnum(UserEnum.ROLE_USER);
+            user.setRole(UserEnum.ROLE_USER);
             ArrayList<Integer> sub = new ArrayList<>();
             ArrayList<Integer> folow = new ArrayList<>();
             user.setFolowing(folow);
@@ -124,7 +128,7 @@ public class MainController {
     }
 
     @PostMapping("/adduserfilm")
-    public List<Films> addUserFilm(@RequestBody long idFilm) {
+    public List<Films> addUserFilm(@RequestBody Long idFilm){
         String auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         User byUsername = userDao.findByUsername(auth);
         List<Films> usersFilms = byUsername.getUsersFilms();
@@ -183,6 +187,7 @@ public class MainController {
         return res;
         //ss
     }
+
 
     private User thisUser = new User();
 
@@ -290,4 +295,14 @@ public class MainController {
 
     }
 
+
+    @GetMapping("/getAllUsers")
+    public List<User> getAllUsers(){
+        return userDao.findAll();
+    }
+
+    @PostMapping("/findSearchingUser")
+    public List<User> findSearchingFilm(@RequestBody String name){
+        return userService.searchUser(name);
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -51,9 +52,12 @@ public class FilmService {
         return finded;
     }
 
-//    public List<Films> getFilms(Long idFilm){
-//        filmsDao.findAll()
-//
-//    }
+    public List<Films> topTen() {
+        List<Films> all = filmsDao.findAll();
+        all.sort((Films o1, Films o2) ->
+            (int) (o2.getScore() - o1.getScore())
+        );
+        return all;
+    }
 
 }

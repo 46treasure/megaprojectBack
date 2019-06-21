@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,6 +33,20 @@ public class UserService {
         byUserKey.setActive(true);
         userDao.save(byUserKey);
         return true;
+    }
+
+    public List<User> searchUser(String name){
+        String s = name.toLowerCase();
+        List<User> all = userDao.findAll();
+        List<User> finded = new ArrayList<>();
+        for (int i = 0; i < all.size(); i++) {
+            String s1 = all.get(i).getUsername().toLowerCase();
+            if (s1.contains(s)) {
+                finded.add(all.get(i));
+            }
+        }
+        System.out.println(finded);
+        return finded;
     }
 
 }

@@ -55,9 +55,9 @@ public class Films {
                 ", genre=" + genre +
                 ", picture='" + picture + '\'' +
                 ", movie='" + movie + '\'' +
+                ", score=" + score +
                 '}';
     }
-
 }
 
 
