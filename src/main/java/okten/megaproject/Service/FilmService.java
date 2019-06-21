@@ -2,11 +2,8 @@ package okten.megaproject.Service;
 
 import okten.megaproject.dao.FilmsDao;
 import okten.megaproject.models.Films;
-import okten.megaproject.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -53,5 +50,10 @@ public class FilmService {
         System.out.println(finded);
         return finded;
     }
+
+//    public List<Films> getFilms(Long idFilm){
+//        filmsDao.findAll()
+//
+//    }
 
 }

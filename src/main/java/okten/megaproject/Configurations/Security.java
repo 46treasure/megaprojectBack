@@ -30,7 +30,7 @@ public class Security extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailServiceImpl);
-//            auth.inMemoryAuthentication().withUser("asd").password("{noop}asd").roles("ADMIN");
+//            auth.inMemoryAuthentication().withUser("admin").password("{noop}admin").roles("ADMIN");
 //            auth.inMemoryAuthentication().withUser("qwe").password("{noop}qwe").roles("USER");
     }
 
@@ -64,7 +64,8 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/userpage-userfilms").authenticated()
                 .antMatchers(HttpMethod.POST,"/deluserfilms").permitAll()
                 .antMatchers(HttpMethod.POST,"/setAvatar").permitAll()
-                .antMatchers(HttpMethod.POST,"/getUserfilmsLength").permitAll()
+                .antMatchers(HttpMethod.GET,"/finishReg/**").permitAll()
+//                .antMatchers(HttpMethod.POST,"/getUserfilmsLength").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new RequestProcessingJWTFilter(), UsernamePasswordAuthenticationFilter.class)

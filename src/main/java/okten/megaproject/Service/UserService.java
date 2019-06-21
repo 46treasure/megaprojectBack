@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-//fgh
 public class UserService {
 
     @Autowired
@@ -25,6 +24,14 @@ public class UserService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean activateUser(String key){
+        User byUserKey = userDao.findByUserKey(key);
+        byUserKey.setUserKey(null);
+        byUserKey.setActive(true);
+        userDao.save(byUserKey);
+        return true;
     }
 
 }

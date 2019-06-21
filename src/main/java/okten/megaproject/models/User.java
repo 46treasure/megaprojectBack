@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -28,13 +29,16 @@ public class User implements UserDetails {
     private String email;
     private String avatar;
     private String status = "offline";
-    private UserEnum userEnum = UserEnum.ROLE_USER;
+    private UserEnum userEnum;
     private ArrayList<Integer> subscribes = new ArrayList<>();
     private ArrayList<Integer> folowing = new ArrayList<>();
     @ManyToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
 
     private List<Films> usersFilms = new ArrayList<>();
+
+    String userKey = UUID.randomUUID().toString();
+    private boolean isActive;
 
 
     @Override
@@ -81,9 +85,10 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", status='" + status + '\'' +
                 ", userEnum=" + userEnum +
-                ", subscribes=" + subscribes +
-                ", folowing=" + folowing +
+                ", userKey='" + userKey + '\'' +
+                ", isActive=" + isActive +
                 ", isAccountNonExpired=" + isAccountNonExpired +
                 ", isAccountNonLocked=" + isAccountNonLocked +
                 ", isCredentialsNonExpired=" + isCredentialsNonExpired +
