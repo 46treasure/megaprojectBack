@@ -4,19 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import okten.megaproject.Service.UserDetailServiceImpl;
-import okten.megaproject.Service.UserService;
-import okten.megaproject.dao.UserDao;
 import okten.megaproject.models.AccountCredentials;
-import okten.megaproject.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -52,7 +47,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
         creds = new ObjectMapper()
                 .readValue(httpServletRequest.getInputStream(), AccountCredentials.class);
-        System.out.println(creds.getUsername());
+        System.out.println(creds);
             return getAuthenticationManager().
                     authenticate(new UsernamePasswordAuthenticationToken(
                             creds.getUsername(),

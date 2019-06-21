@@ -28,4 +28,6 @@ public interface UserDao extends JpaRepository<User, Integer> {
     @Modifying
     @Query("update User set avatar=:avatar where id=:id")
     void setAvatar(@Param("avatar") String avatar, @Param("id") int id);
+
+    User findByUserKey(String key);
 }
