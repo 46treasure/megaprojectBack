@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -89,6 +95,15 @@ public class MainController {
     @PostMapping("/delfilm")
     @CrossOrigin(origins = "http://localhost:4200")
     public List<Films> delFilm(@RequestBody Long filmId) {
+//        String localpath = System.getProperty("user.home") + File.separator + "FilmImages" + File.separator;
+//        Films oneFilm = filmsDao.getOne(filmId);
+//        Path pathToFile = Paths.get(localpath + "dark.jpg");
+//        try {
+//            Files.delete(pathToFile);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.out.println("Image was not deleted");
+//        }
         filmsDao.deleteById(filmId);
         return filmsDao.findAll();
     }
@@ -126,6 +141,12 @@ public class MainController {
         current.setStatus("Online");
         userDao.save(current);
         return current;
+    }
+    @PostMapping("/setStatus")
+    public void  setStatus(@RequestBody String status){
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + status);
+        current.setStatus(status);
+        userDao.save(current);
     }
 
     @PostMapping("/adduserfilm")
