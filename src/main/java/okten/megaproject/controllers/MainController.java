@@ -3,25 +3,16 @@ package okten.megaproject.controllers;
 import okten.megaproject.Configurations.EmailService;
 import okten.megaproject.Service.FilmService;
 import okten.megaproject.Service.UserService;
+import okten.megaproject.dao.CommentDAO;
 import okten.megaproject.dao.FilmsDao;
 import okten.megaproject.dao.UserDao;
-import okten.megaproject.models.AccountCredentials;
-import okten.megaproject.models.Films;
-import okten.megaproject.models.User;
-import okten.megaproject.models.UserEnum;
+import okten.megaproject.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.MessagingException;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -36,21 +27,19 @@ public class MainController {
     FilmService filmService;
     @Autowired
     UserDao userDao;
-
     @Autowired
     UserService userService;
-
     @Autowired
     EmailService emailService;
-
-
+    @Autowired
+    CommentDAO commentDAO;
     @GetMapping("/")
     public List<Films> allFilms() {
         return filmsDao.findAll();
     }
 
     @GetMapping("/topTen")
-    public List<Films> topTen(){
+    public List<Films> topTen() {
         return filmService.topTen();
     }
 
@@ -95,15 +84,6 @@ public class MainController {
     @PostMapping("/delfilm")
     @CrossOrigin(origins = "http://localhost:4200")
     public List<Films> delFilm(@RequestBody Long filmId) {
-//        String localpath = System.getProperty("user.home") + File.separator + "FilmImages" + File.separator;
-//        Films oneFilm = filmsDao.getOne(filmId);
-//        Path pathToFile = Paths.get(localpath + "dark.jpg");
-//        try {
-//            Files.delete(pathToFile);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.out.println("Image was not deleted");
-//        }
         filmsDao.deleteById(filmId);
         return filmsDao.findAll();
     }
@@ -142,22 +122,22 @@ public class MainController {
         userDao.save(current);
         return current;
     }
+
     @PostMapping("/setStatus")
-    public void  setStatus(@RequestBody String status){
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + status);
+    public void setStatus(@RequestBody String status) {
         current.setStatus(status);
         userDao.save(current);
     }
 
     @PostMapping("/adduserfilm")
-    public List<Films> addUserFilm(@RequestBody Long idFilm){
+    public List<Films> addUserFilm(@RequestBody Long idFilm) {
         String auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         User byUsername = userDao.findByUsername(auth);
         List<Films> usersFilms = byUsername.getUsersFilms();
         for (int i = 0; i < usersFilms.size(); i++) {
-             if (usersFilms.get(i).getId() == idFilm){
-                 return usersFilms;
-             }
+            if (usersFilms.get(i).getId() == idFilm) {
+                return usersFilms;
+            }
         }
         Films one = filmsDao.getOne(idFilm);
         usersFilms.add(one);
@@ -311,20 +291,41 @@ public class MainController {
     }
 
     @GetMapping("/finishReg/{key}")
-    public boolean finish(@PathVariable String key){
+    public boolean finish(@PathVariable String key) {
         System.out.println(key);
-       return userService.activateUser(key);
+        return userService.activateUser(key);
 
     }
 
-//asd
+    //asd
     @GetMapping("/getAllUsers")
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userDao.findAll();
     }
 
     @PostMapping("/findSearchingUser")
-    public List<User> findSearchingFilm(@RequestBody String name){
+    public List<User> findSearchingFilm(@RequestBody String name) {
         return userService.searchUser(name);
+    }
+
+
+    @PostMapping("/addComment")
+    public void addComent(@RequestParam String idfilm,
+                            @RequestParam String text) {
+
+        Films currentFilm = filmsDao.getOne(Long.parseLong(idfilm));
+        Comments comments = new Comments();
+        comments.setUserID(current.getId());
+        comments.setUsername(current.getUsername());
+        comments.setAvatar(current.getAvatar());
+        comments.setText(text);
+        comments.setFilm(currentFilm);
+        commentDAO.save(comments);
+    }
+    @PostMapping("/getComments")
+    public List<Comments> getComments (@RequestBody Long id){
+        Films current = filmsDao.getOne(id);
+        List<Comments> comments = current.getComments();
+        return comments;
     }
 }

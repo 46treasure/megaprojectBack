@@ -1,5 +1,6 @@
 package okten.megaproject.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +36,6 @@ public class User implements UserDetails {
     private ArrayList<Integer> folowing = new ArrayList<>();
     @ManyToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
-
     private List<Films> usersFilms = new ArrayList<>();
 
     String userKey = UUID.randomUUID().toString();

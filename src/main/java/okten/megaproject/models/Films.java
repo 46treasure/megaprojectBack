@@ -1,7 +1,7 @@
 package okten.megaproject.models;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +34,9 @@ public class Films {
     @ManyToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<User> user = new ArrayList<>();
-
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "film")
+    @JsonIgnore
+    List<Comments> comments = new ArrayList<>();
     public Films(String name, String year, String aboutFilm, String country, String quality) {
         this.name = name;
         this.year = year;
