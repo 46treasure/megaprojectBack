@@ -33,7 +33,7 @@ public class MainController {
     EmailService emailService;
     @Autowired
     CommentDAO commentDAO;
-    @GetMapping("/")
+    @GetMapping("/home")
     public List<Films> allFilms() {
         return filmsDao.findAll();
     }
@@ -82,9 +82,9 @@ public class MainController {
 
 
     @PostMapping("/delfilm")
-    @CrossOrigin(origins = "http://localhost:4200")
     public List<Films> delFilm(@RequestBody Long filmId) {
         filmsDao.deleteById(filmId);
+        System.out.println("a");
         return filmsDao.findAll();
     }
 
@@ -93,7 +93,6 @@ public class MainController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/reg")
-    @CrossOrigin(origins = "http://localhost:4200")
     public boolean reg(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userDb = userDao.findByUsername(user.getUsername());

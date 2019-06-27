@@ -44,6 +44,7 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/home").permitAll()
                 .antMatchers("/topTen").permitAll()
                 .antMatchers(HttpMethod.POST,"/addfilm").permitAll()
                 .antMatchers(HttpMethod.GET,"/getAllUsers").permitAll()
@@ -82,7 +83,7 @@ public class Security extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
