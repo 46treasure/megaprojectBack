@@ -17,6 +17,7 @@ public class Comments {
     private int userID;
     private String username;
     private String avatar;
+    private String date;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Films film;
 

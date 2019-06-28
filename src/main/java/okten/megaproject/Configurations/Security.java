@@ -70,7 +70,7 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/deluserfilms").permitAll()
                 .antMatchers(HttpMethod.POST,"/setAvatar").permitAll()
                 .antMatchers(HttpMethod.POST,"/setStatus").permitAll()
-                .antMatchers(HttpMethod.POST,"/addComment").permitAll()
+                .antMatchers(HttpMethod.POST,"/addComment").authenticated()
                 .antMatchers(HttpMethod.POST,"/getComments").permitAll()
                 .antMatchers(HttpMethod.GET,"/finishReg/**").permitAll()
                 .anyRequest().authenticated()

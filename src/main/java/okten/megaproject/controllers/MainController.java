@@ -309,8 +309,9 @@ public class MainController {
 
 
     @PostMapping("/addComment")
-    public void addComent(@RequestParam String idfilm,
-                            @RequestParam String text) {
+    public void addComent( @RequestParam String idfilm,
+                           @RequestParam String text,
+                           @RequestParam String date) {
 
         Films currentFilm = filmsDao.getOne(Long.parseLong(idfilm));
         Comments comments = new Comments();
@@ -318,6 +319,7 @@ public class MainController {
         comments.setUsername(current.getUsername());
         comments.setAvatar(current.getAvatar());
         comments.setText(text);
+        comments.setDate(date);
         comments.setFilm(currentFilm);
         commentDAO.save(comments);
     }
