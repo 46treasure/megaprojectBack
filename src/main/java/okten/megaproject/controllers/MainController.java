@@ -307,7 +307,6 @@ public class MainController {
 
     }
 
-    //asd
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers() {
         return userDao.findAll();
