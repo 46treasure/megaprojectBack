@@ -54,8 +54,18 @@ public class MainController {
                          @RequestParam("quality") String quality,
                          @RequestParam("genre") String genre,
                          @RequestParam("picture") MultipartFile picture,
-                         @RequestParam("movie") MultipartFile movie) {
-        System.out.println(genre);
+                         @RequestParam("movie") MultipartFile movie,
+                         @RequestParam("trailer") MultipartFile trailer,
+                         @RequestParam("audio1") MultipartFile audio1,
+                         @RequestParam("audio2") MultipartFile audio2,
+                         @RequestParam("audio3") MultipartFile audio3,
+                         @RequestParam("audio4") MultipartFile audio4,
+//                         @RequestParam("actors") Actors actors,
+                         @RequestParam("screenShots1") MultipartFile screenShots1,
+                         @RequestParam("screenShots2") MultipartFile screenShots2,
+                         @RequestParam("screenShots3") MultipartFile screenShots3,
+                         @RequestParam("screenShots4") MultipartFile screenShots4
+                         ) {
         ArrayList<String> genres = new ArrayList<>();
         for (String rev : genre.split(","))
             genres.add(rev);
@@ -68,6 +78,28 @@ public class MainController {
         film.setPicture(path + picture.getOriginalFilename());
         filmService.transferTo(movie);
         film.setMovie(path + movie.getOriginalFilename());
+        filmService.transferTo(trailer);
+        film.setTrailer(path + trailer.getOriginalFilename());
+        filmService.transferTo(screenShots1);
+        filmService.transferTo(screenShots2);
+        filmService.transferTo(screenShots3);
+        filmService.transferTo(screenShots4);
+        ArrayList<String> screens = new ArrayList<>();
+        screens.add(path + screenShots1.getOriginalFilename());
+        screens.add(path + screenShots2.getOriginalFilename());
+        screens.add(path + screenShots3.getOriginalFilename());
+        screens.add(path + screenShots4.getOriginalFilename());
+        film.setScreenShots(screens);
+        filmService.transferTo(audio1);
+        filmService.transferTo(audio2);
+        filmService.transferTo(audio3);
+        filmService.transferTo(audio4);
+        ArrayList<String> audios = new ArrayList<>();
+        audios.add(path + audio1.getOriginalFilename());
+        audios.add(path + audio2.getOriginalFilename());
+        audios.add(path + audio3.getOriginalFilename());
+        audios.add(path + audio4.getOriginalFilename());
+        film.setAudio(audios);
         return filmsDao.save(film);
     }
 
@@ -205,11 +237,14 @@ public class MainController {
 
     @PostMapping("/currentPage")
     public boolean currentPage(@RequestBody int id) {
-        if (current.getId() == id) {
-            return true;
-        } else {
-            return false;
+        current = get();
+        System.out.println(current.getId());
+        if (id != 0) {
+            if (current.getId() == id) {
+                return true;
+            }
         }
+        return false;
     }
 
     @PostMapping("/subscribe")
@@ -262,9 +297,12 @@ public class MainController {
 
     @PostMapping("/exist")
     public boolean exist(@RequestBody int id) {
-        current = get();
-        ArrayList<Integer> following = current.getFolowing();
-        return following.contains(id);
+        if (get() != null) {
+            current = get();
+            ArrayList<Integer> following = current.getFolowing();
+            return following.contains(id);
+        }
+        return false;
 
     }
 

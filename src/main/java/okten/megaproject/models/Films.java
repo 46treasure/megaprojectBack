@@ -37,6 +37,11 @@ public class Films {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "film")
     @JsonIgnore
     List<Comments> comments = new ArrayList<>();
+
+    private String trailer;
+    private ArrayList<String>  audio;
+    private ArrayList<String> screenShots;
+    private ArrayList<Actors> actors;
     public Films(String name, String year, String aboutFilm, String country, String quality) {
         this.name = name;
         this.year = year;
