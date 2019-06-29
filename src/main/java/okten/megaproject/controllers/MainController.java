@@ -35,7 +35,9 @@ public class MainController {
     CommentDAO commentDAO;
     @GetMapping("/home")
     public List<Films> allFilms() {
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getDetails());
         return filmsDao.findAll();
+
     }
 
     @GetMapping("/topTen")
