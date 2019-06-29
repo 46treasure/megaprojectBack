@@ -84,7 +84,6 @@ public class MainController {
     @PostMapping("/delfilm")
     public List<Films> delFilm(@RequestBody Long filmId) {
         filmsDao.deleteById(filmId);
-        System.out.println("a");
         return filmsDao.findAll();
     }
 
@@ -116,14 +115,17 @@ public class MainController {
     @GetMapping("/get")
     public User get() {
         String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        System.out.println(authentication);
         current = userDao.findByUsername(authentication);
-        current.setStatus("Online");
-        userDao.save(current);
+
+//        current.setStatus("Online");
+//        userDao.save(current);
         return current;
     }
 
     @PostMapping("/setStatus")
     public void setStatus(@RequestBody String status) {
+        current = get();
         current.setStatus(status);
         userDao.save(current);
     }
@@ -150,6 +152,7 @@ public class MainController {
 
     @PostMapping("/deluserfilms")
     public List<Films> delUserFilm(@RequestBody long idFilm) {
+        current = get();
         List<Films> usersFilms = current.getUsersFilms();
         Iterator<Films> iterator = usersFilms.iterator();
         while (iterator.hasNext()) {
@@ -209,6 +212,7 @@ public class MainController {
 
     @PostMapping("/subscribe")
     public void subscribe(@RequestBody int id) {
+        current = get();
         User byId = userDao.getOne(id);
         ArrayList<Integer> subscribes = byId.getSubscribes();
         subscribes.add(current.getId());
@@ -223,6 +227,7 @@ public class MainController {
 
     @PostMapping("/unSubscribe")
     public void unSubscribe(@RequestBody int id) {
+        current = get();
         User byId = userDao.getOne(id);
         ArrayList<Integer> subscribes = byId.getSubscribes();
         Integer currentID = current.getId();
@@ -256,6 +261,7 @@ public class MainController {
 
     @PostMapping("/exist")
     public boolean exist(@RequestBody int id) {
+        current = get();
         ArrayList<Integer> following = current.getFolowing();
         return following.contains(id);
 
@@ -274,15 +280,21 @@ public class MainController {
 
     @PostMapping("/setAvatar")
     public void setAva(@RequestParam("avatar") MultipartFile avatar) {
+        current = get();
         userService.saveAva(avatar);
         userDao.setAvatar(path + avatar.getOriginalFilename(), current.getId());
     }
 
-    @GetMapping("/close")
-    public void close() {
-        current.setStatus("offline");
-        userDao.save(current);
+    @PostMapping("/close")
+    public void close(@RequestBody int id) {
+        System.out.println("!!" + id);
+        if(id != 0) {
+            User onUser = userDao.getOne(id);
+            onUser.setStatus("offline");
+            userDao.save(onUser);
+        }
     }
+
 
     @PostMapping("/search")
     public List<Films> search(@RequestBody String name) {
@@ -314,6 +326,7 @@ public class MainController {
                            @RequestParam String date) {
 
         Films currentFilm = filmsDao.getOne(Long.parseLong(idfilm));
+        current = get();
         Comments comments = new Comments();
         comments.setUserID(current.getId());
         comments.setUsername(current.getUsername());
@@ -328,5 +341,6 @@ public class MainController {
         Films current = filmsDao.getOne(id);
         List<Comments> comments = current.getComments();
         return comments;
+
     }
 }
