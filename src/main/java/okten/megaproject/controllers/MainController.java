@@ -45,6 +45,11 @@ public class MainController {
         return filmService.topTen();
     }
 
+    @GetMapping("/newFilms")
+    public List<Films> newFilms(){
+        return filmsDao.findAll();
+    }
+
     @PostMapping("/addfilm")
 
     public Films addFilm(@RequestParam("name") String name,
@@ -237,12 +242,9 @@ public class MainController {
 
     @PostMapping("/currentPage")
     public boolean currentPage(@RequestBody int id) {
-        current = get();
-        System.out.println(current.getId());
-        if (id != 0) {
-            if (current.getId() == id) {
-                return true;
-            }
+        if (current != null) {
+            current = get();
+            return current.getId() == id;
         }
         return false;
     }
