@@ -42,7 +42,7 @@ public class MainController {
 
     @GetMapping("/topTen")
     public List<Films> topTen() {
-        return filmService.topTen().subList(0,6);
+        return filmService.topTen();
     }
 
     @GetMapping("/newFilms")

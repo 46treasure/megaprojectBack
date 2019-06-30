@@ -67,7 +67,7 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .antMatchers("/get").authenticated()
                 .antMatchers(HttpMethod.POST,"/close").permitAll()
                 .antMatchers(HttpMethod.POST,"/adduserfilm").authenticated()
-                .antMatchers(HttpMethod.POST,"/userpage-userfilms").authenticated()
+                .antMatchers(HttpMethod.POST,"/userpage-userfilms").permitAll()
                 .antMatchers(HttpMethod.POST,"/deluserfilms").permitAll()
                 .antMatchers(HttpMethod.POST,"/setAvatar").permitAll()
                 .antMatchers(HttpMethod.POST,"/setStatus").authenticated()
