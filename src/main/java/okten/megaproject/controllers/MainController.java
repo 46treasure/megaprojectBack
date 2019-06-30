@@ -362,7 +362,6 @@ public class MainController {
         return userService.activateUser(key);
 
     }
-//a
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers() {
         return userDao.findAll();
