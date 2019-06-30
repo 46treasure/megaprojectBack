@@ -42,7 +42,7 @@ public class MainController {
 
     @GetMapping("/topTen")
     public List<Films> topTen() {
-        return filmService.topTen();
+        return filmService.topTen().subList(0,6);
     }
 
     @GetMapping("/newFilms")
@@ -65,11 +65,18 @@ public class MainController {
                          @RequestParam("audio2") MultipartFile audio2,
                          @RequestParam("audio3") MultipartFile audio3,
                          @RequestParam("audio4") MultipartFile audio4,
-//                         @RequestParam("actors") Actors actors,
                          @RequestParam("screenShots1") MultipartFile screenShots1,
                          @RequestParam("screenShots2") MultipartFile screenShots2,
                          @RequestParam("screenShots3") MultipartFile screenShots3,
-                         @RequestParam("screenShots4") MultipartFile screenShots4
+                         @RequestParam("screenShots4") MultipartFile screenShots4,
+                         @RequestParam("actor1") String actor1,
+                         @RequestParam("imgActor1") MultipartFile imgActor1,
+                         @RequestParam("actor2") String actor2,
+                         @RequestParam("imgActor2") MultipartFile imgActor2,
+                         @RequestParam("actor3") String actor3,
+                         @RequestParam("imgActor3") MultipartFile imgActor3,
+                         @RequestParam("actor4") String actor4,
+                         @RequestParam("imgActor4") MultipartFile imgActor4
                          ) {
         ArrayList<String> genres = new ArrayList<>();
         for (String rev : genre.split(","))
@@ -85,29 +92,39 @@ public class MainController {
         film.setMovie(path + movie.getOriginalFilename());
         filmService.transferTo(trailer);
         film.setTrailer(path + trailer.getOriginalFilename());
-        filmService.transferTo(screenShots1);
-        filmService.transferTo(screenShots2);
-        filmService.transferTo(screenShots3);
-        filmService.transferTo(screenShots4);
-        ArrayList<String> screens = new ArrayList<>();
-        screens.add(path + screenShots1.getOriginalFilename());
-        screens.add(path + screenShots2.getOriginalFilename());
-        screens.add(path + screenShots3.getOriginalFilename());
-        screens.add(path + screenShots4.getOriginalFilename());
-        film.setScreenShots(screens);
-        filmService.transferTo(audio1);
-        filmService.transferTo(audio2);
-        filmService.transferTo(audio3);
-        filmService.transferTo(audio4);
-        ArrayList<String> audios = new ArrayList<>();
-        audios.add(path + audio1.getOriginalFilename());
-        audios.add(path + audio2.getOriginalFilename());
-        audios.add(path + audio3.getOriginalFilename());
-        audios.add(path + audio4.getOriginalFilename());
-        film.setAudio(audios);
+        film.setScreenShots(createList(screenShots1, screenShots2, screenShots3, screenShots4));
+        film.setAudio(createList(audio1, audio2, audio3, audio4));
+        film.setActors(addActors(actor1, imgActor1, actor2, imgActor2, actor3, imgActor3, actor4, imgActor4));
         return filmsDao.save(film);
     }
 
+    ArrayList<String> createList(MultipartFile file1,MultipartFile file2,MultipartFile file3,MultipartFile file4) {
+        ArrayList<String> list = new ArrayList<>();
+        filmService.transferTo(file1);
+        filmService.transferTo(file2);
+        filmService.transferTo(file3);
+        filmService.transferTo(file4);
+        list.add(path + file1.getOriginalFilename());
+        list.add(path + file2.getOriginalFilename());
+        list.add(path + file3.getOriginalFilename());
+        list.add(path + file4.getOriginalFilename());
+        return list;
+    }
+         ArrayList<Actors> addActors (String actor1, MultipartFile imgActor1,
+                         String actor2, MultipartFile imgActor2,
+                         String actor3, MultipartFile imgActor3,
+                         String actor4, MultipartFile imgActor4) {
+        ArrayList<Actors> actors = new ArrayList<>();
+        filmService.transferTo(imgActor1);
+        filmService.transferTo(imgActor2);
+        filmService.transferTo(imgActor3);
+        filmService.transferTo(imgActor4);
+        actors.add(new Actors(actor1, path + imgActor1.getOriginalFilename()));
+        actors.add(new Actors(actor2, path + imgActor2.getOriginalFilename()));
+        actors.add(new Actors(actor3, path + imgActor3.getOriginalFilename()));
+        actors.add(new Actors(actor4, path + imgActor4.getOriginalFilename()));
+        return actors;
+         }
     @PostMapping("/getbyid")
     @CrossOrigin(origins = "http://localhost:4200")
     public Films getById(@RequestBody Long id) {
@@ -154,11 +171,7 @@ public class MainController {
     @GetMapping("/get")
     public User get() {
         String authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        System.out.println(authentication);
         current = userDao.findByUsername(authentication);
-
-//        current.setStatus("Online");
-//        userDao.save(current);
         return current;
     }
 
