@@ -100,10 +100,7 @@ public class MainController {
 
     ArrayList<String> createList(MultipartFile file1,MultipartFile file2,MultipartFile file3,MultipartFile file4) {
         ArrayList<String> list = new ArrayList<>();
-        filmService.transferTo(file1);
-        filmService.transferTo(file2);
-        filmService.transferTo(file3);
-        filmService.transferTo(file4);
+        transferFour(file1,file2,file3,file4);
         list.add(path + file1.getOriginalFilename());
         list.add(path + file2.getOriginalFilename());
         list.add(path + file3.getOriginalFilename());
@@ -115,15 +112,19 @@ public class MainController {
                          String actor3, MultipartFile imgActor3,
                          String actor4, MultipartFile imgActor4) {
         ArrayList<Actors> actors = new ArrayList<>();
-        filmService.transferTo(imgActor1);
-        filmService.transferTo(imgActor2);
-        filmService.transferTo(imgActor3);
-        filmService.transferTo(imgActor4);
+        transferFour(imgActor1,imgActor2,imgActor3,imgActor4);
         actors.add(new Actors(actor1, path + imgActor1.getOriginalFilename()));
         actors.add(new Actors(actor2, path + imgActor2.getOriginalFilename()));
         actors.add(new Actors(actor3, path + imgActor3.getOriginalFilename()));
         actors.add(new Actors(actor4, path + imgActor4.getOriginalFilename()));
         return actors;
+         }
+
+         void transferFour(MultipartFile file1,MultipartFile file2,MultipartFile file3,MultipartFile file4) {
+             filmService.transferTo(file1);
+             filmService.transferTo(file2);
+             filmService.transferTo(file3);
+             filmService.transferTo(file4);
          }
     @PostMapping("/getbyid")
     @CrossOrigin(origins = "http://localhost:4200")
