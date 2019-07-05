@@ -26,6 +26,7 @@ public class MainController {
 
     @Autowired
     @GetMapping("/home")
+    @CrossOrigin("http://localhost:4200/")
     public List<Films> allFilms() {
         return filmsDao.findAll();
 
