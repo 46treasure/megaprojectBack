@@ -43,7 +43,7 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/home").permitAll()
                 .antMatchers("/topTen").permitAll()
                 .antMatchers(HttpMethod.POST,"/addfilm").permitAll()
                 .antMatchers(HttpMethod.GET,"/getAllUsers").permitAll()

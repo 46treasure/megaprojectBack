@@ -33,14 +33,8 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private AccountCredentials creds;
 
-
-
     @Autowired
     UserDetailServiceImpl userDetailService;
-
-
-
-
 
 
     @Override

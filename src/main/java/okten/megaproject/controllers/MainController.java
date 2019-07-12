@@ -38,7 +38,7 @@ public class MainController {
     EmailService emailService;
 
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public List<Films> allFilms() {
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getDetails());
         return filmsDao.findAll();
@@ -113,8 +113,10 @@ public class MainController {
             ArrayList<Integer> folow = new ArrayList<>();
             user.setFolowing(folow);
             user.setSubscribes(sub);
+            user.setActive(true);
+            user.setUserKey(null);
             userDao.save(user);
-            emailService.send(user.getEmail(), user);
+//            emailService.send(user.getEmail(), user);
             return true;
         }
     }
@@ -293,7 +295,6 @@ public class MainController {
 
     @GetMapping("/finishReg/{key}")
     public boolean finish(@PathVariable String key){
-        System.out.println(key);
        return userService.activateUser(key);
 
     }
