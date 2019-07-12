@@ -59,14 +59,13 @@ public class FilmService {
         );
         return all;
     }
-//
-//    public List<Films> newFilms() {
-//        List<Films> all = filmsDao.findAll();
-//        List<Films> newFilms = new ArrayList<>();
-//        for (int i = 0; i < all.size(); i++) {
-//            newFilms.add(all.get(i));
-//        }
-//        System.out.println(2222222);
-//        return newFilms;
-//    }
+
+    public List<Films> newFilms() {
+        List<Films> all = filmsDao.findAll();
+        List<Films> newFilms = new ArrayList<>();
+        for (int i = all.size() - 1; i >= 0; i--) {
+            newFilms.add(all.get(i));
+        }
+        return newFilms;
+    }
 }

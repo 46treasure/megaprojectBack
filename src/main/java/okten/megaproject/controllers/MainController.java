@@ -39,7 +39,7 @@ public class MainController {
 
     @GetMapping("/newFilms")
     public List<Films> newFilms(){
-        return filmsDao.findAll();
+        return filmService.newFilms();
     }
 
     @PostMapping("/addfilm")
