@@ -51,7 +51,7 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .antMatchers("/newFilms").permitAll()
                 .antMatchers(HttpMethod.POST,"/addfilm").permitAll()
                 .antMatchers(HttpMethod.GET,"/getAllUsers").permitAll()
-                .antMatchers(HttpMethod.POST,"/getbyid").authenticated()
+                .antMatchers(HttpMethod.POST,"/getbyid").permitAll()
                 .antMatchers(HttpMethod.POST,"/delfilm").permitAll()
                 .antMatchers(HttpMethod.POST,"/findByGenre").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()

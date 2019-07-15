@@ -39,7 +39,7 @@ public class User implements UserDetails {
     private List<Films> usersFilms = new ArrayList<>();
 
     String userKey = UUID.randomUUID().toString();
-    private boolean isActive;
+    private boolean isActive = true;
 
 
     @Override

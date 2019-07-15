@@ -54,8 +54,9 @@ public class UserController {
             ArrayList<Integer> folow = new ArrayList<>();
             user.setFolowing(folow);
             user.setSubscribes(sub);
+            user.setUserKey(null);
             userDao.save(user);
-            emailService.send(user.getEmail(), user);
+//            emailService.send(user.getEmail(), user);
             return true;
         }
     }
