@@ -212,12 +212,12 @@ public class UserController {
     @PostMapping("/setAvatar")
     public void setAva(@RequestParam("avatar") MultipartFile avatar) throws IOException {
         current = get();
-//        String ava = multipartService.streamToS3(avatar);
-//        current.setAvatar(ava);
-//        userDao.save(current);
-        userService.saveAva(avatar);
-        String path = "http://127.0.0.1:8887/";
-        userDao.setAvatar(path + avatar.getOriginalFilename(), current.getId());
+        String ava = multipartService.streamToS3(avatar);
+        current.setAvatar(ava);
+        userDao.save(current);
+//        userService.saveAva(avatar);
+//        String path = "http://127.0.0.1:8887/";
+//        userDao.setAvatar(path + avatar.getOriginalFilename(), current.getId());
     }
 
     @PostMapping("/search")
