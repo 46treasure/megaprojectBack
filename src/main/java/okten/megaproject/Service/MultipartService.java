@@ -15,8 +15,13 @@ import java.io.InputStream;
 
 @Service
 public class MultipartService {
-    public String streamToS3(MultipartFile file) throws IOException {
-        byte[] bytes = file.getBytes();
+    public String streamToS3(MultipartFile file)  {
+        byte[] bytes = new byte[0];
+        try {
+            bytes = file.getBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         AWSCredentials credentials  = new BasicAWSCredentials(
                 "AKIAZM6O5IMQ4UKUEHVP",
                 "wCrMlrEBzoHbo6c6spG7F1ejGlAovTuT6fPeyOYj");

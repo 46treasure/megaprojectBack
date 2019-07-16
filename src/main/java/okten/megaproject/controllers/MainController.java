@@ -1,5 +1,6 @@
 package okten.megaproject.controllers;
 import okten.megaproject.Service.FilmService;
+import okten.megaproject.Service.MultipartService;
 import okten.megaproject.dao.FilmsDao;
 import okten.megaproject.dao.UserDao;
 import okten.megaproject.models.*;
@@ -12,16 +13,18 @@ import java.util.List;
 
 @RestController
 public class MainController {
-    private String path = "http://127.0.0.1:8887/";
+//    private String path = "http://127.0.0.1:8887/";
     private final FilmsDao filmsDao;
     private final FilmService filmService;
     private final UserDao userDao;
+    private MultipartService multipartService;
 
     @Autowired
-    public MainController(FilmsDao filmsDao, FilmService filmService, UserDao userDao) {
+    public MainController(FilmsDao filmsDao, FilmService filmService, UserDao userDao, MultipartService multipartService) {
         this.filmsDao = filmsDao;
         this.filmService = filmService;
         this.userDao = userDao;
+        this.multipartService = multipartService;
     }
 
     @Autowired
@@ -76,13 +79,13 @@ public class MainController {
         ArrayList<Integer> listRating = new ArrayList<>();
         film.setRating(listRating);
         film.setScore(0);
-        filmService.transferTo(picture);
+        //filmService.transferTo(picture);
         film.setGenre(genres);
-        film.setPicture(path + picture.getOriginalFilename());
-        filmService.transferTo(movie);
-        film.setMovie(path + movie.getOriginalFilename());
-        filmService.transferTo(trailer);
-        film.setTrailer(path + trailer.getOriginalFilename());
+        film.setPicture( multipartService.streamToS3(picture));
+        //filmService.transferTo(movie);
+        film.setMovie( multipartService.streamToS3(movie));
+        //filmService.transferTo(trailer);
+        film.setTrailer(multipartService.streamToS3(trailer));
         film.setScreenShots(createList(screenShots1, screenShots2, screenShots3, screenShots4));
         film.setAudio(createList(audio1, audio2, audio3, audio4));
         film.setActors(addActors(actor1, imgActor1, actor2, imgActor2, actor3, imgActor3, actor4, imgActor4));
@@ -91,11 +94,15 @@ public class MainController {
 
     private ArrayList<String> createList(MultipartFile file1,MultipartFile file2,MultipartFile file3,MultipartFile file4) {
         ArrayList<String> list = new ArrayList<>();
-        transferFour(file1,file2,file3,file4);
-        list.add(path + file1.getOriginalFilename());
-        list.add(path + file2.getOriginalFilename());
-        list.add(path + file3.getOriginalFilename());
-        list.add(path + file4.getOriginalFilename());
+//        transferFour(file1,file2,file3,file4);
+//        list.add(path + file1.getOriginalFilename());
+//        list.add(path + file2.getOriginalFilename());
+//        list.add(path + file3.getOriginalFilename());
+//        list.add(path + file4.getOriginalFilename());
+        list.add(multipartService.streamToS3(file1));
+        list.add(multipartService.streamToS3(file2));
+        list.add(multipartService.streamToS3(file3));
+        list.add(multipartService.streamToS3(file4));
         return list;
     }
         private ArrayList<Actors> addActors (String actor1, MultipartFile imgActor1,
@@ -103,20 +110,24 @@ public class MainController {
                          String actor3, MultipartFile imgActor3,
                          String actor4, MultipartFile imgActor4) {
         ArrayList<Actors> actors = new ArrayList<>();
-        transferFour(imgActor1,imgActor2,imgActor3,imgActor4);
-        actors.add(new Actors(actor1, path + imgActor1.getOriginalFilename()));
-        actors.add(new Actors(actor2, path + imgActor2.getOriginalFilename()));
-        actors.add(new Actors(actor3, path + imgActor3.getOriginalFilename()));
-        actors.add(new Actors(actor4, path + imgActor4.getOriginalFilename()));
+//        transferFour(imgActor1,imgActor2,imgActor3,imgActor4);
+//        actors.add(new Actors(actor1, path + imgActor1.getOriginalFilename()));
+//        actors.add(new Actors(actor2, path + imgActor2.getOriginalFilename()));
+//        actors.add(new Actors(actor3, path + imgActor3.getOriginalFilename()));
+//        actors.add(new Actors(actor4, path + imgActor4.getOriginalFilename()));
+            actors.add(new Actors(actor1, multipartService.streamToS3(imgActor1)));
+            actors.add(new Actors(actor2, multipartService.streamToS3(imgActor2)));
+            actors.add(new Actors(actor3, multipartService.streamToS3(imgActor3)));
+            actors.add(new Actors(actor4, multipartService.streamToS3(imgActor4)));
         return actors;
          }
 
-         private void transferFour( MultipartFile file1,MultipartFile file2,MultipartFile file3,MultipartFile file4) {
-             filmService.transferTo(file1);
-             filmService.transferTo(file2);
-             filmService.transferTo(file3);
-             filmService.transferTo(file4);
-         }
+//         private void transferFour( MultipartFile file1,MultipartFile file2,MultipartFile file3,MultipartFile file4) {
+//             filmService.transferTo(file1);
+//             filmService.transferTo(file2);
+//             filmService.transferTo(file3);
+//             filmService.transferTo(file4);
+//         }
     @PostMapping("/getbyid")
     public Films getById(@RequestBody Long id) {
         return filmsDao.getOne(id);
