@@ -13,4 +13,6 @@ public class FileConfig implements WebMvcConfigurer {
         String path = System.getProperty("user.home") + File.separator + "FilmImages" + File.separator;
         registry.addResourceHandler("/ava/**").addResourceLocations(path);
     }
+
+
 }

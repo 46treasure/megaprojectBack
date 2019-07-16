@@ -1,6 +1,7 @@
 package okten.megaproject.controllers;
 import okten.megaproject.Configurations.EmailService;
 import okten.megaproject.Service.FilmService;
+import okten.megaproject.Service.MultipartService;
 import okten.megaproject.Service.UserService;
 import okten.megaproject.dao.CommentDAO;
 import okten.megaproject.dao.FilmsDao;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,9 +31,10 @@ public class UserController {
     private final EmailService emailService;
     private User current = new User();
     private final PasswordEncoder passwordEncoder;
+    private MultipartService multipartService;
 
     @Autowired
-    public UserController(FilmsDao filmsDao, CommentDAO commentDAO, FilmService filmService, UserDao userDao, UserService userService, EmailService emailService, PasswordEncoder passwordEncoder) {
+    public UserController(FilmsDao filmsDao, CommentDAO commentDAO, FilmService filmService, UserDao userDao, UserService userService, EmailService emailService, PasswordEncoder passwordEncoder, MultipartService multipartService) {
         this.filmsDao = filmsDao;
         this.commentDAO = commentDAO;
         this.filmService = filmService;
@@ -39,6 +42,7 @@ public class UserController {
         this.userService = userService;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
+        this.multipartService = multipartService;
     }
 
     @PostMapping("/reg")
@@ -54,8 +58,10 @@ public class UserController {
             ArrayList<Integer> folow = new ArrayList<>();
             user.setFolowing(folow);
             user.setSubscribes(sub);
+            user.setUserKey(null);
+            user.setActive(true);
             userDao.save(user);
-            emailService.send(user.getEmail(), user);
+//            emailService.send(user.getEmail(), user);
             return true;
         }
     }
@@ -204,8 +210,11 @@ public class UserController {
     }
 
     @PostMapping("/setAvatar")
-    public void setAva(@RequestParam("avatar") MultipartFile avatar) {
+    public void setAva(@RequestParam("avatar") MultipartFile avatar) throws IOException {
         current = get();
+//        String ava = multipartService.streamToS3(avatar);
+//        current.setAvatar(ava);
+//        userDao.save(current);
         userService.saveAva(avatar);
         String path = "http://127.0.0.1:8887/";
         userDao.setAvatar(path + avatar.getOriginalFilename(), current.getId());
