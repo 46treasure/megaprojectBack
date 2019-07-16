@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
+import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -43,8 +45,10 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
+                .antMatchers("/").permitAll()
                 .antMatchers("/home").permitAll()
                 .antMatchers("/topTen").permitAll()
+                .antMatchers("/newFilms").permitAll()
                 .antMatchers(HttpMethod.POST,"/addfilm").permitAll()
                 .antMatchers(HttpMethod.GET,"/getAllUsers").permitAll()
                 .antMatchers(HttpMethod.POST,"/getbyid").permitAll()
@@ -63,11 +67,14 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/getFolowing").permitAll()
                 .antMatchers(HttpMethod.POST, "/rating").permitAll()
                 .antMatchers("/get").authenticated()
-                .antMatchers(HttpMethod.GET,"/close").permitAll()
+                .antMatchers(HttpMethod.POST,"/close").permitAll()
                 .antMatchers(HttpMethod.POST,"/adduserfilm").authenticated()
-                .antMatchers(HttpMethod.POST,"/userpage-userfilms").authenticated()
+                .antMatchers(HttpMethod.POST,"/userpage-userfilms").permitAll()
                 .antMatchers(HttpMethod.POST,"/deluserfilms").permitAll()
                 .antMatchers(HttpMethod.POST,"/setAvatar").permitAll()
+                .antMatchers(HttpMethod.POST,"/setStatus").authenticated()
+                .antMatchers(HttpMethod.POST,"/addComment").authenticated()
+                .antMatchers(HttpMethod.POST,"/getComments").authenticated()
                 .antMatchers(HttpMethod.GET,"/finishReg/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -79,7 +86,7 @@ public class Security extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
@@ -107,6 +114,10 @@ public class Security extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(userDetailServiceImpl);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
+    }
+    @Bean
+    public HttpFirewall defaultHttpFirewall() {
+        return new DefaultHttpFirewall();
     }
 }
 

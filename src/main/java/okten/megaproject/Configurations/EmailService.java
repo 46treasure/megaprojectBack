@@ -31,7 +31,7 @@ public class EmailService {
             mimeMessage.setFrom(new InternetAddress(env.getProperty("spring.mail.username")));
             mimeMessageHelper.setTo(email);
             String message = String.format("Hello %s! \n"  +
-                            "Visit this link: http://localhost:4200/finishReg/%s",
+                            "Visit this link: http://localhost:4200/finishReg/%s or pick here ",
                     user.getUsername(),
                     user.getUserKey());
             mimeMessageHelper.setText(message, true);

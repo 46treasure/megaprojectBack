@@ -38,7 +38,7 @@ public class FilmService {
         return finded;
     }
 
-    public List<Films> searchFilms(String name){
+    public List<Films> searchFilms(String name) {
         String s = name.toLowerCase();
         List<Films> all = filmsDao.findAll();
         List<Films> finded = new ArrayList<>();
@@ -55,9 +55,18 @@ public class FilmService {
     public List<Films> topTen() {
         List<Films> all = filmsDao.findAll();
         all.sort((Films o1, Films o2) ->
-            (int) (o2.getScore() - o1.getScore())
+                (int) (o2.getScore() - o1.getScore())
         );
         return all;
+    }
+
+    public List<Films> newFilms() {
+        List<Films> all = filmsDao.findAll();
+        List<Films> newFilms = new ArrayList<>();
+        for (int i = all.size() - 1; i >= 0; i--) {
+            newFilms.add(all.get(i));
+        }
+        return newFilms;
     }
 
 }
