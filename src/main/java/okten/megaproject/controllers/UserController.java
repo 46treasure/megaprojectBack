@@ -218,6 +218,7 @@ public class UserController {
 //        userService.saveAva(avatar);
 //        String path = "http://127.0.0.1:8887/";
 //        userDao.setAvatar(path + avatar.getOriginalFilename(), current.getId());
+//        wqdq
     }
 
     @PostMapping("/search")
