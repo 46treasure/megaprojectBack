@@ -52,7 +52,7 @@ public class UserController {
         if (userDb != null) {
             return false;
         } else {
-            user.setAvatar("assets/ava.jpg");
+            user.setAvatar("assets/noava.png");
             user.setRole(UserEnum.ROLE_USER);
             ArrayList<Integer> sub = new ArrayList<>();
             ArrayList<Integer> folow = new ArrayList<>();
